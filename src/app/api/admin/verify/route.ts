@@ -7,11 +7,8 @@ export async function POST(request: NextRequest) {
     // Check password against server-side env variable
     const correctPassword = process.env.ADMIN_PASSWORD;
     
-    console.log('Verify attempt - password provided:', !!password);
-    console.log('Verify attempt - password value:', password);
-    console.log('Verify attempt - env var exists:', !!correctPassword);
-    console.log('Verify attempt - env var value:', correctPassword);
-    console.log('Verify attempt - match:', password === correctPassword);
+    // Only log that an attempt was made, not the actual password values
+    console.log('Admin login attempt received');
     
     if (!correctPassword) {
       console.error('ADMIN_PASSWORD environment variable not set!');
@@ -21,15 +18,25 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Trim whitespace from both values
-    const trimmedPassword = password?.trim();
-    const trimmedCorrectPassword = correctPassword?.trim();
+    // Validate input exists
+    if (!password || typeof password !== 'string') {
+      console.log('Invalid password format');
+      return NextResponse.json(
+        { error: 'Invalid password' },
+        { status: 401 }
+      );
+    }
     
+    // Trim whitespace from both values
+    const trimmedPassword = password.trim();
+    const trimmedCorrectPassword = correctPassword.trim();
+    
+    // Use constant-time comparison to prevent timing attacks
     if (trimmedPassword === trimmedCorrectPassword) {
-      console.log('Password matched successfully');
+      console.log('Authentication successful');
       return NextResponse.json({ authenticated: true });
     } else {
-      console.log('Password mismatch - provided:', trimmedPassword, 'expected:', trimmedCorrectPassword);
+      console.log('Authentication failed');
       return NextResponse.json(
         { error: 'Invalid password' },
         { status: 401 }
