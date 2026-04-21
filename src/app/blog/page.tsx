@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface BlogPost {
   id: string;
@@ -35,11 +36,8 @@ function BlogContent() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/admin/blog');
-      if (response.ok) {
-        const data = await response.json();
-        setPosts(data.posts.filter((post: BlogPost) => post.published));
-      }
+      const data = await safeJsonFetch<{ posts: BlogPost[] }>('/api/admin/blog');
+      setPosts((data.posts || []).filter((post: BlogPost) => post.published));
     } catch (error) {
       console.error('Error fetching posts:', error);
     } finally {

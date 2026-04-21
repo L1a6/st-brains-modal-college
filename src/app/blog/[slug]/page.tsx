@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface BlogPost {
   id: string;
@@ -52,29 +53,23 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
   const fetchPost = async () => {
     try {
-      // Fetch all posts
-      const response = await fetch('/api/admin/blog');
-      if (response.ok) {
-        const data = await response.json();
-        const publishedPosts = data.posts.filter((p: BlogPost) => p.published);
-        
-        // Find the current post
-        const currentPost = publishedPosts.find((p: BlogPost) => p.slug === slug);
-        
-        if (!currentPost) {
-          notFound();
-          return;
-        }
-        
-        setPost(currentPost);
-        
-        // Find related posts (same category, max 3)
-        const related = publishedPosts
-          .filter((p: BlogPost) => p.id !== currentPost.id && p.category === currentPost.category)
-          .slice(0, 3);
-        
-        setRelatedPosts(related);
+      const data = await safeJsonFetch<{ posts: BlogPost[] }>('/api/admin/blog');
+      const publishedPosts = (data.posts || []).filter((p: BlogPost) => p.published);
+
+      const currentPost = publishedPosts.find((p: BlogPost) => p.slug === slug);
+
+      if (!currentPost) {
+        notFound();
+        return;
       }
+
+      setPost(currentPost);
+
+      const related = publishedPosts
+        .filter((p: BlogPost) => p.id !== currentPost.id && p.category === currentPost.category)
+        .slice(0, 3);
+
+      setRelatedPosts(related);
     } catch (error) {
       console.error('Error fetching post:', error);
     } finally {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface SiteSettings {
   registration_open: boolean;
@@ -25,8 +26,7 @@ export default function SettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
-      const data = await res.json();
+      const data = await safeJsonFetch<{ settings?: SiteSettings }>('/api/settings');
       if (data.settings) {
         setSettings(data.settings);
       }

@@ -40,7 +40,7 @@ export default function FAQSection() {
           <div className="relative opacity-0 animate-slide-in-left">
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=80"
+                src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=1200&q=80"
                 alt="Support"
                 fill
                 quality={90}

@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface GalleryImage {
   id: number;
@@ -35,8 +36,7 @@ function GalleryContent() {
   const fetchImages = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/gallery');
-      const data = await response.json();
+      const data = await safeJsonFetch<GalleryImage[]>('/api/gallery');
       if (Array.isArray(data)) {
         setImages(data);
       }

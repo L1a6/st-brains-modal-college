@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { createClient } from '@supabase/supabase-js';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -46,8 +47,7 @@ export default function AdminTestimonialsPage() {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch('/api/admin/testimonials');
-      const data = await response.json();
+      const data = await safeJsonFetch<Testimonial[]>('/api/admin/testimonials');
       setTestimonials(data);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
