@@ -109,7 +109,7 @@ export default function StaffSection() {
       <section className="cards">
         {cards.map((staff) => (
           <div
-            className={\`card-wrap \${dragId === staff.id ? 'is-dragging' : ''}\`}
+            className={`card-wrap ${dragId === staff.id ? 'is-dragging' : ''}`}
             key={staff.id}
             draggable
             onDragStart={handleDragStart(staff.id)}
@@ -126,7 +126,7 @@ export default function StaffSection() {
               <img src={staff.image} alt="bg" className="card-bg" draggable="false" />
 
               <div className="card-status">
-                <div className={\`card-status-dot \${staff.status === 'Online' ? 'online' : 'offline'}\`}></div>
+                <div className={`card-status-dot ${staff.status === 'Online' ? 'online' : 'offline'}`}></div>
                 <div className="card-status-text">{staff.status}</div>
               </div>
 
@@ -204,7 +204,7 @@ export default function StaffSection() {
       {/* Required for the icons */}
       <Script src="https://code.iconify.design/3/3.1.0/iconify.min.js" strategy="lazyOnload" />
 
-      <style dangerouslySetInnerHTML={{ __html: \`
+      <style dangerouslySetInnerHTML={{ __html: `
         /*=================
                VARS
         ===================*/
@@ -685,7 +685,7 @@ export default function StaffSection() {
           font-weight: 700;
           margin: 0.25rem 0;
         }
-      \` }} />
+      ` }} />
     </section>
   );
 }
