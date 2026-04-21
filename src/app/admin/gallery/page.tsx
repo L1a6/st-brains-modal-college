@@ -3,13 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { createClient } from '@supabase/supabase-js';
 import { safeJsonFetch } from '@/lib/safeJsonFetch';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface GalleryImage {
   id: number;
@@ -32,7 +26,6 @@ export default function AdminGalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [formData, setFormData] = useState({
     title: '',
@@ -54,35 +47,6 @@ export default function AdminGalleryPage() {
       console.error('Error fetching gallery images:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setUploading(true);
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `gallery/${formData.category}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from('images')
-        .getPublicUrl(filePath);
-
-      setFormData({ ...formData, src: data.publicUrl });
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Failed to upload image');
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -263,21 +227,16 @@ export default function AdminGalleryPage() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Image *
+                    Image URL *
                   </label>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploading}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#0A1236] file:text-white hover:file:bg-[#0A1236]/90"
+                    type="url"
+                    required
+                    value={formData.src}
+                    onChange={(e) => setFormData({ ...formData, src: e.target.value })}
+                    placeholder="https://images.unsplash.com/..."
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#0A1236]"
                   />
-                  {uploading && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#0A1236]"></div>
-                      <p className="text-sm text-gray-500">Uploading...</p>
-                    </div>
-                  )}
                   {formData.src && (
                     <div className="mt-4 relative w-full h-48 rounded-lg overflow-hidden">
                       <Image
@@ -294,7 +253,7 @@ export default function AdminGalleryPage() {
                 <div className="flex gap-4 pt-4">
                   <button
                     type="submit"
-                    disabled={!formData.src || uploading}
+                    disabled={!formData.src}
                     className="flex-1 px-6 py-3 bg-[#0A1236] text-white rounded-lg hover:bg-[#0A1236]/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Add Image

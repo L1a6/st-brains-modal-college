@@ -1,20 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { addGalleryImage, listGalleryImages, removeGalleryImage } from '@/data/gallery';
 
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('gallery_images')
-      .select('*')
-      .order('id', { ascending: true }); // Oldest first (by ID)
-
-    if (error) throw error;
-
+    const data = listGalleryImages();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching gallery images:', error);
@@ -45,13 +34,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data, error } = await supabase
-      .from('gallery_images')
-      .insert([{ src, title, category }])
-      .select()
-      .single();
-
-    if (error) throw error;
+    const data = addGalleryImage({ src, title, category });
 
     return NextResponse.json(data);
   } catch (error) {
@@ -75,39 +58,12 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Get the image first to extract the file path for storage deletion
-    const { data: image, error: fetchError } = await supabase
-      .from('gallery_images')
-      .select('src')
-      .eq('id', id)
-      .single();
-
-    if (fetchError) throw fetchError;
-
-    // Delete from database
-    const { error: deleteError } = await supabase
-      .from('gallery_images')
-      .delete()
-      .eq('id', id);
-
-    if (deleteError) throw deleteError;
-
-    // Try to delete from storage if it's a Supabase storage URL
-    if (image?.src && image.src.includes('supabase')) {
-      try {
-        // Extract the file path from the URL
-        const urlParts = image.src.split('/storage/v1/object/public/');
-        if (urlParts.length > 1) {
-          const pathParts = urlParts[1].split('/');
-          const bucket = pathParts[0];
-          const filePath = pathParts.slice(1).join('/');
-          
-          await supabase.storage.from(bucket).remove([filePath]);
-        }
-      } catch (storageError) {
-        // Log but don't fail if storage deletion fails
-        console.error('Error deleting from storage:', storageError);
-      }
+    const removed = removeGalleryImage(Number(id));
+    if (!removed) {
+      return NextResponse.json(
+        { error: 'Gallery image not found' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true });

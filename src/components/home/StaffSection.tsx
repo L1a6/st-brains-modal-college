@@ -1,50 +1,48 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { facilitators } from '@/data/facilitators';
-
-const staffImages = [
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80',
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&q=80',
-  'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=1200&q=80',
-];
 
 type StaffCard = {
   id: string;
   name: string;
-  title: string;
   image: string;
   status: 'Online' | 'Offline';
   rating: string;
   learners: string;
   description: string;
-  specializations: string[];
 };
 
 export default function StaffSection() {
-  const profileNames = ['Amina Okon', 'Chinonso Etim', 'David Effiong'];
-  const profileTitles = ['Lead Facilitator', 'Senior Facilitator', 'STEM Facilitator'];
-
   const initialCards = useMemo<StaffCard[]>(
-    () =>
-      facilitators.slice(0, 3).map((staff, index) => ({
-        id: staff.id,
-        name: profileNames[index] || staff.name,
-        title: profileTitles[index] || staff.title,
-        image: staffImages[index] || staff.image,
-        status: index === 2 ? 'Offline' : 'Online',
-        rating: index === 0 ? '4.5' : index === 1 ? '4.0' : '5.0',
-        learners: index === 0 ? '3.1K' : index === 1 ? '2.4K' : '1.7K',
-        description:
-          index === 0
-            ? 'Builds confident communication and academic clarity for students.'
-            : index === 1
-              ? 'Leads structured learning pathways that improve outcomes consistently.'
-              : 'Drives practical science coaching with measurable progress.',
-        specializations: staff.specializations || [],
-      })),
+    () => [
+      {
+        id: 'teacher-1',
+        name: 'Amina Okon',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80',
+        status: 'Online',
+        rating: '4.5',
+        learners: '3.1 K',
+        description: 'English teacher building confident communication and clear expression.',
+      },
+      {
+        id: 'teacher-2',
+        name: 'Chinonso Etim',
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&q=80',
+        status: 'Online',
+        rating: '4.0',
+        learners: '2.4 K',
+        description: 'Mathematics teacher turning complex concepts into simple, practical steps.',
+      },
+      {
+        id: 'teacher-3',
+        name: 'David Effiong',
+        image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=900&q=80',
+        status: 'Offline',
+        rating: '5.0',
+        learners: '1.7 K',
+        description: 'Science teacher guiding students with data-driven, hands-on learning.',
+      },
+    ],
     []
   );
 
@@ -52,7 +50,7 @@ export default function StaffSection() {
   const [dragId, setDragId] = useState<string | null>(null);
   const [handleReadyId, setHandleReadyId] = useState<string | null>(null);
 
-  const play = (file: string, volume = 0.45) => {
+  const play = (file: string, volume = 0.5) => {
     const audio = new Audio(file);
     audio.volume = volume;
     void audio.play().catch(() => {});
@@ -74,6 +72,7 @@ export default function StaffSection() {
   const handleDrop = (targetId: string) => (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const sourceId = event.dataTransfer.getData('text/plain') || dragId;
+
     if (!sourceId || sourceId === targetId) {
       document.body.classList.remove('grabbing');
       setDragId(null);
@@ -97,21 +96,24 @@ export default function StaffSection() {
   };
 
   return (
-    <section className="section-spacing bg-[var(--bg-primary)] overflow-hidden staff-ux">
+    <section className="section-spacing bg-[var(--bg-primary)] staff-shell">
       <div className="container-custom">
-        <div className="mb-10 md:mb-14 text-center">
-          <p className="text-xs md:text-sm uppercase tracking-[0.32em] text-[var(--adeips-blue)] mb-4">
-            Meet Our Staff
-          </p>
-          <h2 className="font-outfit text-3xl md:text-5xl lg:text-6xl font-light text-[var(--adeips-navy)] dark:text-white tracking-tight mb-4">
-            Our Facilitators
-          </h2>
-          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-3xl mx-auto">
-            Top-notch staff focused on clear teaching and student growth.
-          </p>
-        </div>
+        <header className="header">
+          <a href="/about" className="made" aria-label="Our teachers" role="tooltip">
+            <div className="by">OUR STAFF</div>
+            <div className="logo">
+              <img
+                src="https://i.imgur.com/aNnuxjo.png"
+                alt="logo"
+                className="logo-img"
+                draggable={false}
+              />
+              <div className="logo-text">ST Brains</div>
+            </div>
+          </a>
+        </header>
 
-        <section className="staff-cards" aria-label="Draggable staff cards">
+        <section className="cards" aria-label="Staff profile cards">
           {cards.map((staff) => (
             <div
               key={staff.id}
@@ -126,15 +128,9 @@ export default function StaffSection() {
               onDrop={handleDrop(staff.id)}
               className={`card-wrap ${dragId === staff.id ? 'is-dragging' : ''}`}
             >
-              <article className="card">
+              <div className="card">
                 <div className="card-filter" />
-                <Image
-                  src={staff.image}
-                  alt={staff.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="card-bg"
-                />
+                <img src={staff.image} alt={staff.name} className="card-bg" draggable={false} />
 
                 <div className="card-status">
                   <div className={`card-status-dot ${staff.status === 'Online' ? 'online' : 'offline'}`} />
@@ -146,19 +142,18 @@ export default function StaffSection() {
                   onMouseDown={() => setHandleReadyId(staff.id)}
                   onMouseUp={() => setHandleReadyId(null)}
                   onMouseLeave={() => setHandleReadyId(null)}
-                  aria-label="Drag card"
-                  role="button"
-                  tabIndex={0}
                 >
-                  <svg className="handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />
-                  </svg>
+                  <div className="card-handle-tip" aria-label="Drag" role="tooltip">
+                    <svg className="handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />
+                    </svg>
+                  </div>
                 </div>
 
                 <div className="card-content">
                   <div className="card-name-wrap">
                     <div className="card-name">{staff.name}</div>
-                    <div className="card-verified" aria-label="Verified" role="img">
+                    <div className="card-verified" aria-label="Verified" role="tooltip">
                       ✓
                     </div>
                   </div>
@@ -175,75 +170,118 @@ export default function StaffSection() {
 
                   <div className="card-description">{staff.description}</div>
 
-                  <Link href="/about/facilitators" className="card-button pointer">
+                  <a href="/about/facilitators" className="card-button pointer">
                     <div className="card-button-text pointer">Get In Touch</div>
                     <div className="card-button-call pointer">
                       <svg className="card-button-call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.62a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6.27 6.27l1.28-1.28a2 2 0 0 1 2.11-.45c.84.3 1.72.51 2.62.63A2 2 0 0 1 22 16.92z" />
                       </svg>
                     </div>
-                  </Link>
+                  </a>
                 </div>
 
                 <div className="card-fade" />
-              </article>
+              </div>
             </div>
           ))}
-
         </section>
 
-        <footer className="staff-footer">
+        <footer className="footer">
           <a className="follow" href="/about/facilitators">
-            <div className="staff-by">MEET THE FULL TEAM</div>
-            <div className="follow-text">Explore all facilitators</div>
+            <div className="by">MORE ABOUT OUR STAFF?</div>
+            <div className="follow-x">
+              <div className="follow-logo">S</div>
+              <div className="follow-text">
+                <div className="follow-us">explore</div>
+                <div className="follow-handle">our team</div>
+              </div>
+            </div>
           </a>
         </footer>
       </div>
 
       <style jsx>{`
-        .staff-ux {
-          --staff-red: var(--adeips-red);
+        .staff-shell {
+          --bg: #ffffff;
+          --text: #ffffff;
+          --accent: #000000;
           --radius: 2.5rem;
+          --shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
           --anim: cubic-bezier(0, 0, 0.25, 1);
+          --brand-red: var(--adeips-red);
         }
 
-        .staff-footer {
-          display: flex;
-          justify-content: center;
-        }
-
-        .staff-footer {
-          margin-top: 2.2rem;
-        }
-
-        .staff-made,
-        .follow {
-          color: var(--adeips-navy);
-          text-align: center;
-          display: flex;
-          flex-flow: column;
-          gap: 0.15rem;
+        a {
           text-decoration: none;
         }
 
-        .staff-by {
-          font-size: 0.62rem;
+        .pointer,
+        a,
+        button {
+          cursor: pointer;
+        }
+
+        .grab {
+          cursor: grab;
+        }
+
+        .is-dragging,
+        .is-dragging .grab {
+          cursor: grabbing;
+        }
+
+        .by {
+          font-size: 0.5rem;
+          opacity: 0.5;
           letter-spacing: 0.2rem;
-          opacity: 0.65;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          margin-bottom: 0.15rem;
           text-transform: uppercase;
         }
 
-        .follow-text {
-          font-size: 1.1rem;
-          font-weight: 700;
+        .header {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-flow: column;
+          margin: 0 0 2.5rem 0;
         }
 
-        .staff-cards {
+        .logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: -1rem;
+        }
+
+        .made {
+          color: var(--adeips-navy);
+          justify-content: center;
+          align-items: center;
+          flex-flow: column;
+          opacity: 0.8;
+          display: flex;
+        }
+
+        .logo-img {
+          height: 1.75rem;
+          margin-right: 0.3rem;
+          pointer-events: none;
+          user-select: none;
+        }
+
+        .logo-text {
+          font-weight: 800;
+          font-size: 1.3rem;
+        }
+
+        .cards {
           display: flex;
           justify-content: center;
           align-items: center;
           flex-wrap: wrap;
-          gap: 1rem;
           width: 100%;
         }
 
@@ -254,18 +292,21 @@ export default function StaffSection() {
 
         .card-wrap.is-dragging {
           transform: rotate(3deg) scale(0.98);
-          z-index: 20;
+          z-index: 99;
         }
 
         .card-filter {
           position: absolute;
-          inset: 0;
-          background: rgba(255, 255, 255, 0.12);
-          z-index: 8;
+          height: 100%;
+          width: 100%;
+          left: 0;
+          top: 0;
+          background: rgba(255, 255, 255, 0.1);
+          z-index: 9;
           pointer-events: none;
           backdrop-filter: blur(0.2rem);
           opacity: 0;
-          transition: opacity 0.2s var(--anim);
+          transition: opacity 0.1s var(--anim);
         }
 
         .card-wrap:hover .card-filter,
@@ -280,24 +321,31 @@ export default function StaffSection() {
           justify-content: flex-end;
           height: 22rem;
           width: 14rem;
+          min-height: 22rem;
+          min-width: 14rem;
+          max-height: 22rem;
+          max-width: 14rem;
+          margin: 1rem;
           padding: 1rem;
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: var(--radius);
-          box-shadow: 0 0.45rem 1rem rgba(10, 31, 68, 0.2);
+          box-shadow: var(--shadow);
           position: relative;
-          transition: transform 0.3s var(--anim), box-shadow 0.3s var(--anim);
-          background: #071734;
-        }
-
-        .card-wrap:hover .card {
-          transform: translateY(-4px);
-          box-shadow: 0 1rem 2rem rgba(10, 31, 68, 0.28);
+          transition: opacity 0.4s var(--anim), transform 0.3s var(--anim);
+          background: #0a1236;
         }
 
         .card-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          z-index: -1;
+          pointer-events: none;
+          user-select: none;
           object-fit: cover;
-          z-index: 0;
           transition: transform 0.8s ease;
         }
 
@@ -308,38 +356,42 @@ export default function StaffSection() {
         .card-content {
           position: relative;
           z-index: 3;
-          padding: 0 0.15rem;
+          padding: 0 0.25rem;
           width: 100%;
         }
 
         .card-status {
+          margin: 0.25rem 0;
           display: flex;
           justify-content: center;
           align-items: center;
           background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(0.45rem);
+          backdrop-filter: blur(0.5rem);
           width: 5rem;
           height: 1.5rem;
-          border-radius: 999px;
+          border-radius: var(--radius);
           position: absolute;
           top: 1rem;
           left: 1rem;
-          z-index: 4;
-          color: #fff;
+          pointer-events: none;
+          user-select: none;
         }
 
         .card-status-dot {
-          height: 0.32rem;
-          width: 0.32rem;
+          height: 0.3rem;
+          width: 0.3rem;
           border-radius: 50%;
-          margin-right: 0.6rem;
           position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 0.75rem;
         }
 
-        .card-status-dot::after {
+        .card-status-dot:after {
           content: '';
-          position: absolute;
-          inset: 0;
+          height: 100%;
+          width: 100%;
           background: inherit;
           border-radius: 50%;
           animation: pulse 1s var(--anim) infinite;
@@ -350,21 +402,23 @@ export default function StaffSection() {
         }
 
         .card-status-dot.offline {
-          background: #8b93a6;
+          background: grey;
         }
 
-        .card-status-dot.offline::after {
+        .card-status-dot.offline:after {
           animation: none;
         }
 
         .card-status-text {
           font-size: 0.7rem;
-          opacity: 0.88;
+          opacity: 0.85;
+          color: #fff;
         }
 
         .card-handle {
-          background: rgba(255, 255, 255, 0.45);
-          backdrop-filter: blur(0.2rem);
+          background: rgba(255, 255, 255, 0.4);
+          backdrop-filter: blur(0.1rem);
+          border-radius: var(--radius);
           position: absolute;
           top: 1rem;
           right: 1rem;
@@ -375,11 +429,18 @@ export default function StaffSection() {
           justify-content: center;
           align-items: center;
           color: #111;
-          z-index: 5;
+        }
+
+        .card-handle-tip {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          width: 100%;
         }
 
         .handle {
-          width: 1.25rem;
+          width: 100%;
           height: 1.25rem;
         }
 
@@ -388,55 +449,64 @@ export default function StaffSection() {
           display: flex;
           align-items: center;
           margin: 0.75rem 0;
-          color: #fff;
         }
 
         .card-name {
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           font-weight: 700;
-          margin-right: 0.4rem;
+          margin-right: 0.5rem;
+          color: #fff;
         }
 
         .card-verified {
           font-size: 0.95rem;
           color: #fff;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
           width: 1.1rem;
           height: 1.1rem;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.25);
+          background: rgba(255, 255, 255, 0.22);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .card-tags {
           display: flex;
-          margin: 0.4rem 0;
+          align-items: center;
+          flex-flow: row;
+          margin: 0.5rem 0;
         }
 
         .card-tag {
           display: flex;
+          justify-content: center;
           align-items: center;
-          background: rgba(255, 255, 255, 0.14);
-          backdrop-filter: blur(0.4rem);
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(0.5rem);
           padding: 0.3rem 0.5rem;
           border-radius: var(--radius);
           font-size: 0.75rem;
           margin-right: 0.5rem;
+          pointer-events: none;
           color: #fff;
         }
 
         .card-rating-text {
-          margin-right: 0.35rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 0.5rem;
         }
 
         .card-rating-stars {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           font-size: 0.5rem;
-          letter-spacing: 0.02rem;
         }
 
         .card-description {
-          color: rgba(255, 255, 255, 0.9);
+          color: #fff;
           font-size: 0.8rem;
           line-height: 1.6;
           font-weight: 300;
@@ -447,34 +517,28 @@ export default function StaffSection() {
           padding: 0.3rem 0.3rem 0.3rem 0.5rem;
           border-radius: var(--radius);
           background: rgba(255, 255, 255, 0.2);
-          color: #fff;
+          color: var(--bg);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          min-height: 2.5rem;
-          transition: background 0.2s var(--anim), transform 0.2s var(--anim);
-          text-decoration: none;
+          transition: background 0.2s var(--anim);
         }
 
         .card-wrap:hover .card-button {
-          background: var(--staff-red);
-          transform: translateY(-1px);
-        }
-
-        .card-wrap:not(:hover) .card-button {
-          background: rgba(255, 255, 255, 0.2);
+          background: var(--brand-red);
         }
 
         .card-button-call {
-          background: #fff;
+          background: var(--bg);
           min-height: 2.5rem;
           min-width: 2.5rem;
           border-radius: 50%;
-          color: #111;
+          color: var(--accent);
           display: flex;
           justify-content: center;
           align-items: center;
-          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+          text-align: center;
+          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
         }
 
         .card-button-text {
@@ -486,29 +550,79 @@ export default function StaffSection() {
         }
 
         .card-button-call-icon {
-          width: 1rem;
-          height: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          width: 1.1rem;
+          height: 1.1rem;
         }
 
         .card-fade {
           position: absolute;
           bottom: 0;
           left: 0;
-          height: 18rem;
+          height: 20rem;
           width: 100%;
-          z-index: 2;
-          opacity: 0.86;
-          background: linear-gradient(to bottom, rgba(7, 23, 52, 0), rgba(7, 23, 52, 1));
+          z-index: 0;
+          opacity: 0.75;
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
           pointer-events: none;
         }
 
-        .grab {
-          cursor: grab;
+        .footer {
+          margin: 2.5rem 0 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
-        .is-dragging .grab,
-        .is-dragging {
-          cursor: grabbing;
+        .follow {
+          color: var(--adeips-navy);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-flow: column;
+        }
+
+        .follow-x {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 1rem 0;
+        }
+
+        .follow-logo {
+          height: 2rem;
+          width: 2rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0.5rem;
+          margin-right: 0.5rem;
+          color: #fff;
+          background: var(--adeips-navy);
+          font-size: 0.8rem;
+          font-weight: 700;
+        }
+
+        .follow-text {
+          font-size: 0.8rem;
+          font-weight: 600;
+          display: flex;
+          justify-content: center;
+          flex-flow: column;
+        }
+
+        .follow-us {
+          text-transform: uppercase;
+          opacity: 0.5;
+          font-size: 0.7rem;
+        }
+
+        .follow-handle {
+          font-weight: 700;
+          margin: 0.25rem 0;
         }
 
         @keyframes pulse {
@@ -517,7 +631,7 @@ export default function StaffSection() {
             opacity: 1;
           }
           to {
-            transform: scale(2.8);
+            transform: scale(3);
             opacity: 0;
           }
         }
