@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       console.log('📨 Sending welcome email to:', email);
       await sendEmail({
         to: email,
-        subject: 'Welcome to ADEIPS - Application Received',
+        subject: 'Welcome to ST Brains Modal College - Application Received',
         react: WelcomeEmail({
           fullName,
           email,
@@ -71,11 +71,11 @@ export async function POST(request: NextRequest) {
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: #0A1236; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+              .header { background: #7F1D1D; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
               .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
-              .info-row { margin: 15px 0; padding: 10px; background: white; border-left: 4px solid #0A1236; }
-              .info-label { font-weight: bold; color: #0A1236; }
-              .button { display: inline-block; padding: 12px 24px; background: #0A1236; color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }
+              .info-row { margin: 15px 0; padding: 10px; background: white; border-left: 4px solid #7F1D1D; }
+              .info-label { font-weight: bold; color: #7F1D1D; }
+              .button { display: inline-block; padding: 12px 24px; background: #7F1D1D; color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }
             </style>
           </head>
           <body>
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
                   <div>${new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' })}</div>
                 </div>
                 
-                <a href="${process.env.NEXT_PUBLIC_SITE_URL?.includes('localhost') ? 'https://adeips-official-website.vercel.app' : (process.env.NEXT_PUBLIC_SITE_URL || 'https://adeips-official-website.vercel.app')}/admin/enrollments" class="button">
+                <a href="${process.env.NEXT_PUBLIC_SITE_URL?.includes('localhost') ? 'https://stbrainsmodalcollege.vercel.app' : (process.env.NEXT_PUBLIC_SITE_URL || 'https://stbrainsmodalcollege.vercel.app')}/admin/enrollments" class="button">
                   View in Admin Dashboard →
                 </a>
               </div>

@@ -42,7 +42,7 @@ const courseModules = [
     id: 5,
     title: 'Structural Transition Mechanics and Rhetorical Flow Design',
     description: 'Techniques for engineering seamless narrative progression, conceptual linkage, and logical coherence in extended presentations.',
-    image: '/images/project.jpg',
+    image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80',
     category: 'Structure',
     duration: 'Full Program',
   },
@@ -50,7 +50,7 @@ const courseModules = [
     id: 6,
     title: 'Applied Psychophysiology of Confidence and Stage Anxiety Dissolution',
     description: 'A scientific, stepwise methodology for deconstructing performance anxiety using behavioral conditioning, cognitive reframing, and somatic control.',
-    image: '/images/project1.jpg',
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
     category: 'Psychology',
     duration: 'Core Module',
   },
@@ -99,7 +99,7 @@ export default function CoursesPage() {
     <main ref={containerRef} className="min-h-screen bg-white dark:bg-[#0A1236] pt-24">
       {/* Hero Section - Matching Gallery/About Style */}
       <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1236]/90 via-[#0A1236]/80 to-[#0A1236]/90 z-10"></div>
+        <div className="brand-menu-overlay"></div>
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1920&q=90"
@@ -237,7 +237,7 @@ export default function CoursesPage() {
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80"
-            alt="Join ADEIPS"
+            alt="Join ST Brains Modal College"
             fill
             sizes="100vw"
             className="object-cover"
@@ -256,8 +256,7 @@ export default function CoursesPage() {
               Begin Your<br />Transformation
             </h2>
             <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Join the elite ranks of ADEIPS graduates who command stages, influence decisions, 
-              and inspire change through the power of exceptional public speaking.
+              Join ST Brains Modal College and build a strong academic foundation in a learning environment designed for excellence.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">

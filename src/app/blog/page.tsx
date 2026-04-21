@@ -243,10 +243,10 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0A1236] pt-24">
       <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1236]/95 via-[#0A1236]/90 to-[#0A1236]/95 z-10"></div>
+        <div className="brand-menu-overlay"></div>
         <div className="absolute inset-0">
           <Image
-            src="/images/hero/hero-3.jpg"
+            src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=1920&q=80"
             alt="Blog"
             fill
             sizes="100vw"

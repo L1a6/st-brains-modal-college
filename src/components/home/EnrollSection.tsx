@@ -2,17 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface SiteSettings {
   registration_open: boolean;
   current_cohort: number;
   cohort_message: string;
-}
-
-function getOrdinalSuffix(n: number): string {
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = n % 100;
-  return s[(v - 20) % 10] || s[v] || s[0];
 }
 
 export default function EnrollSection() {
@@ -21,8 +16,7 @@ export default function EnrollSection() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
-        const data = await res.json();
+        const data = await safeJsonFetch<{ settings?: SiteSettings }>('/api/settings');
         if (data.settings) {
           setSettings(data.settings);
         }
@@ -35,25 +29,22 @@ export default function EnrollSection() {
   }, []);
 
   const getCohortTitle = () => {
-    if (settings?.current_cohort) {
-      return `Join Our ${settings.current_cohort}${getOrdinalSuffix(settings.current_cohort)} Cohort`;
-    }
-    return 'Join Our Next Cohort';
+    return 'Enroll for the Next Session';
   };
 
   const getCohortMessage = () => {
     if (settings?.cohort_message) {
       return settings.cohort_message;
     }
-    return 'Limited spots available for ambitious communicators ready to transform their speaking skills. Applications close soon for our intensive 10-week program.';
+    return 'Admissions are now open for students ready to thrive in a premium secondary school with modern facilities and top-notch staff.';
   };
 
   return (
     <section id="enroll" className="relative h-[600px] w-full overflow-hidden">
       <div className="absolute inset-0">
         <Image
-          src="/images/enroll.jpg"
-          alt="Join ADEIPS"
+          src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1920&q=80"
+          alt="Enroll for next session"
           fill
           sizes="100vw"
           className="object-cover"

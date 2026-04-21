@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface SiteSettings {
   registration_open: boolean;
@@ -35,8 +36,7 @@ export default function EnrollPage() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
-      const data = await res.json();
+      const data = await safeJsonFetch<{ settings?: SiteSettings }>('/api/settings');
       if (data.settings) {
         setSettings(data.settings);
       }
@@ -61,7 +61,9 @@ export default function EnrollPage() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = response.headers.get('content-type')?.includes('application/json')
+        ? await response.json()
+        : { error: 'Unexpected non-JSON response from enrollment endpoint' };
       
       if (!response.ok) {
         const errorMsg = data.details || data.error || 'Submission failed';
@@ -91,10 +93,10 @@ export default function EnrollPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0A1236] pt-24">
       <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1236]/95 via-[#0A1236]/90 to-[#0A1236]/95 z-10"></div>
+        <div className="brand-menu-overlay"></div>
         <div className="absolute inset-0">
           <Image
-            src="/images/hero/hero-1.jpg"
+            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80"
             alt="Enroll"
             fill
             sizes="100vw"
@@ -186,10 +188,10 @@ export default function EnrollPage() {
               transition={{ duration: 0.8 }}
             >
               <h2 className="font-outfit text-3xl font-light text-gray-900 dark:text-white mb-6">
-                Ready to Transform Your Communication Skills?
+                Ready to Join ST Brains Modal College?
               </h2>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                Take the first step towards becoming an exceptional public speaker. Fill out the form and our team will get back to you within 24 hours to discuss the best program for your needs.
+                Take the first step toward premium secondary education. Fill out the form and our admissions team will contact you within 24 hours.
               </p>
 
               <div className="space-y-6">
@@ -201,10 +203,10 @@ export default function EnrollPage() {
                   </div>
                   <div>
                     <h3 className="font-outfit text-lg font-medium text-gray-900 dark:text-white mb-2">
-                      Expert Facilitators
+                      Experienced Teachers
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Learn from industry professionals with years of experience.
+                      Learn from top-notch staff dedicated to academic excellence.
                     </p>
                   </div>
                 </div>
@@ -233,10 +235,10 @@ export default function EnrollPage() {
                   </div>
                   <div>
                     <h3 className="font-outfit text-lg font-medium text-gray-900 dark:text-white mb-2">
-                      Certification
+                      Academic Records
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Receive recognized certification upon completion.
+                      Receive complete academic records and graduation documentation.
                     </p>
                   </div>
                 </div>

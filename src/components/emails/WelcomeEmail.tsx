@@ -27,29 +27,29 @@ export default function WelcomeEmail({
 }: WelcomeEmailProps) {
   // Use production URL by default, fallback to env variable for local development
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.includes('localhost') 
-    ? 'https://adeips-official-website.vercel.app'
-    : (process.env.NEXT_PUBLIC_SITE_URL || 'https://adeips-official-website.vercel.app');
+    ? 'https://stbrainsmodalcollege.vercel.app'
+    : (process.env.NEXT_PUBLIC_SITE_URL || 'https://stbrainsmodalcollege.vercel.app');
   
   return (
     <Html>
       <Head />
-      <Preview>Welcome to ADEIPS - Your Journey to Excellence Begins</Preview>
+      <Preview>Welcome to ST Brains Modal College - Your Journey to Excellence Begins</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header with Logo */}
           <Section style={header}>
             <Img
-              src={`${siteUrl}/images/logo.png`}
+              src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80"
               width="180"
               height="60"
-              alt="ADEIPS"
+              alt="ST Brains Modal College"
               style={logo}
             />
           </Section>
 
           {/* Hero Section */}
           <Section style={heroSection}>
-            <Heading style={h1}>Welcome to ADEIPS</Heading>
+            <Heading style={h1}>Welcome to ST Brains Modal College</Heading>
             <Text style={heroText}>
               Your Journey to Excellence Begins Here
             </Text>
@@ -61,9 +61,9 @@ export default function WelcomeEmail({
               Dear <strong>{fullName}</strong>,
             </Text>
             <Text style={paragraph}>
-              Thank you for your interest in the <strong>Executive Institute of Public Speaking</strong>. 
+              Thank you for your interest in the <strong>ST Brains Modal College</strong>. 
               We are thrilled to receive your enrollment application and excited about the 
-              possibility of guiding you on your journey to becoming an exceptional communicator.
+              possibility of guiding you on your journey through premium secondary education.
             </Text>
 
             {/* Info Box */}
@@ -105,14 +105,14 @@ export default function WelcomeEmail({
             </Section>
 
             <Text style={paragraph}>
-              In the meantime, feel free to explore our website to learn more about our programs, 
-              facilitators, and the transformative experiences that await you.
+              In the meantime, feel free to explore our website to learn more about our school,
+              facilities, and the student experience that awaits you.
             </Text>
 
             {/* CTA Button */}
             <Section style={buttonContainer}>
               <Link href={`${siteUrl}/courses`} style={button}>
-                Explore Our Programs
+                Explore School Information
               </Link>
             </Section>
 
@@ -125,8 +125,8 @@ export default function WelcomeEmail({
                 We're here to help! Feel free to reach out:
               </Text>
               <Text style={contactText}>
-                Email: <Link href="mailto:adinstituteofpublicspeaking@gmail.com" style={link}>adinstituteofpublicspeaking@gmail.com</Link><br />
-                Web: <Link href={siteUrl} style={link}>ADEIPS Website</Link>
+                Email: <Link href="mailto:admissions@stbrainsmodalcollege.edu.ng" style={link}>admissions@stbrainsmodalcollege.edu.ng</Link><br />
+                Web: <Link href={siteUrl} style={link}>ST Brains Modal College Website</Link>
               </Text>
             </Section>
           </Section>
@@ -135,16 +135,16 @@ export default function WelcomeEmail({
           <Section style={footer}>
             <Hr style={hr} />
             <Text style={footerText}>
-              <strong>Executive Institute of Public Speaking (ADEIPS)</strong><br />
-              Redefining Excellence In Public Speaking
+              <strong>ST Brains Modal College</strong><br />
+              Premium Secondary Education in Uyo
             </Text>
             <Text style={footerText}>
-              © {new Date().getFullYear()} ADEIPS. All rights reserved.
+              © {new Date().getFullYear()} ST Brains Modal College. All rights reserved.
             </Text>
             <Text style={footerLinks}>
               <Link href={`${siteUrl}/about`} style={footerLink}>About</Link> • 
-              <Link href={`${siteUrl}/courses`} style={footerLink}>Courses</Link> • 
-              <Link href={`${siteUrl}/blog`} style={footerLink}>Blog</Link>
+              <Link href={`${siteUrl}/gallery`} style={footerLink}>Gallery</Link> • 
+              <Link href={`${siteUrl}/enroll`} style={footerLink}>Enroll</Link>
             </Text>
           </Section>
         </Container>
@@ -169,7 +169,7 @@ const container = {
 const header = {
   padding: '40px 40px 20px',
   textAlign: 'center' as const,
-  backgroundColor: '#0A1236',
+  backgroundColor: '#7F1D1D',
 };
 
 const logo = {
@@ -177,7 +177,7 @@ const logo = {
 };
 
 const heroSection = {
-  backgroundColor: '#0A1236',
+  backgroundColor: '#7F1D1D',
   padding: '20px 40px 40px',
   textAlign: 'center' as const,
 };
@@ -211,7 +211,7 @@ const paragraph = {
 };
 
 const h2 = {
-  color: '#0A1236',
+  color: '#7F1D1D',
   fontSize: '24px',
   fontWeight: '600',
   lineHeight: '1.3',
@@ -219,7 +219,7 @@ const h2 = {
 };
 
 const h3 = {
-  color: '#0A1236',
+  color: '#7F1D1D',
   fontSize: '20px',
   fontWeight: '600',
   lineHeight: '1.3',

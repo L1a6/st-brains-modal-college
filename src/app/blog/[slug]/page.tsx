@@ -101,7 +101,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
   const handleShare = async () => {
     const shareData = {
-      title: post?.title || 'ADEIPS Blog',
+      title: post?.title || 'ST Brains Modal College Blog',
       text: post?.excerpt || '',
       url: getShareUrl(),
     };

@@ -2,14 +2,14 @@
   "posts": [
     {
       "id": "1",
-      "slug": "welcome-to-adeips-blog",
-      "title": "Welcome to the ADEIPS Blog",
-      "excerpt": "Stay updated with the latest news, tips, and insights from the Executive Institute of Public Speaking.",
+      "slug": "welcome-to-st-brains-modal-college-blog",
+      "title": "Welcome to ST Brains Modal College",
+      "excerpt": "Stay updated with school news, academic insights, and student success stories from ST Brains Modal College.",
       "content": "Welcome to our blog! Here you'll find valuable resources, success stories, and expert tips to help you master public speaking...",
-      "author": "ADEIPS Team",
+      "author": "ST Brains Modal College Team",
       "date": "2024-11-24",
       "category": "Announcements",
-      "image": "/images/blog/welcome.jpg",
+      "image": "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1200&q=80",
       "featured": true
     },
     {
@@ -21,7 +21,7 @@
       "author": "Raphael Edem",
       "date": "2024-11-20",
       "category": "Tips & Guides",
-      "image": "/images/blog/confident-speaking.jpg",
+      "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=80",
       "featured": false
     },
     {
@@ -33,7 +33,7 @@
       "author": "Regina Edem",
       "date": "2024-11-18",
       "category": "Events",
-      "image": "/images/blog/workshop.jpg",
+      "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80",
       "featured": true
     }
   ]

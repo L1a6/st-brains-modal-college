@@ -4,40 +4,12 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  cohort: string;
-  image: string;
-  quote: string;
-  full_testimony: string;
-  highlight: string;
-  key_takeaways?: string[];
-}
+import { testimonialsData, Testimonial } from '@/data/testimonials';
 
 export default function TestimonialsPage() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [testimonials] = useState<Testimonial[]>(testimonialsData);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response = await fetch('/api/admin/testimonials');
-        const data = await response.json();
-        setTestimonials(data);
-      } catch (error) {
-        console.error('Error fetching testimonials:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTestimonials();
-  }, []);
 
   // Check for hash on mount and when hash changes
   useEffect(() => {
@@ -58,17 +30,6 @@ export default function TestimonialsPage() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, [testimonials]);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-white dark:bg-[#0A1236] pt-24 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0A1236] dark:border-white mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-white">Loading testimonials...</p>
-        </div>
-      </main>
-    );
-  }
-
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTestimonial(null);
@@ -84,15 +45,25 @@ export default function TestimonialsPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0A1236] pt-24">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 dark:from-[#0A1236] via-white dark:via-[#0D1640] to-gray-50 dark:to-[#0A1236]" />
+      <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
+        <div className="brand-menu-overlay" />
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80"
+            alt="Testimonials"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+        </div>
         
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-sm tracking-[0.3em] uppercase text-[#0A1236] dark:text-white/90 mb-4 font-semibold"
+            className="text-sm tracking-[0.3em] uppercase text-white/90 mb-4 font-semibold"
           >
             Success Stories
           </motion.p>
@@ -100,17 +71,17 @@ export default function TestimonialsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-outfit text-4xl md:text-6xl font-extralight text-[#0A1236] dark:text-white tracking-tight mb-6"
+            className="font-outfit text-4xl md:text-6xl font-extralight text-white tracking-tight mb-6"
           >
-            Voices of Transformation
+            Testimonials from Students
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-gray-600 dark:text-white/70 max-w-2xl mx-auto"
+            className="text-lg text-white/85 max-w-2xl mx-auto"
           >
-            Discover the journeys of professionals who transformed their speaking abilities and careers through ADEIPS
+            Discover the journeys of students who transformed their confidence and academic growth through ST Brains Modal College
           </motion.p>
         </div>
       </section>
@@ -195,7 +166,7 @@ export default function TestimonialsPage() {
             Ready to Write Your Story?
           </h2>
           <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto">
-            Join hundreds of professionals who have transformed their communication and careers through ADEIPS
+            Join students who are thriving through quality teaching, premium facilities, and top-notch staff.
           </p>
           <Link
             href="/enroll"

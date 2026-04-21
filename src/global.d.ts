@@ -33,3 +33,9 @@ declare module 'next-themes' {
     systemTheme?: string;
   };
 }
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'dotlottie-player': any;
+  }
+}

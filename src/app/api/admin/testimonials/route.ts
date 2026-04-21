@@ -1,123 +1,44 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { testimonialsData } from '@/data/testimonials';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const LOCAL_MODE_MESSAGE =
+  'Testimonials are running in local-file mode. Admin writes are disabled for now.';
 
 export async function GET() {
-  try {
-    const { data, error } = await supabase
-      .from('testimonials')
-      .select('*')
-      .order('id', { ascending: true }); // Oldest first (by ID)
-
-    if (error) throw error;
-
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error fetching testimonials:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch testimonials' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(testimonialsData);
 }
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { name, role, cohort, image, quote, full_testimony, highlight, key_takeaways } = body;
-
-    const { data, error } = await supabase
-      .from('testimonials')
-      .insert([
-        {
-          name,
-          role,
-          cohort,
-          image,
-          quote,
-          full_testimony,
-          highlight,
-          key_takeaways,
-        },
-      ])
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error creating testimonial:', error);
-    return NextResponse.json(
-      { error: 'Failed to create testimonial' },
-      { status: 500 }
-    );
-  }
+  const body = await request.json();
+  return NextResponse.json(
+    {
+      error: LOCAL_MODE_MESSAGE,
+      payload: body,
+    },
+    { status: 501 }
+  );
 }
 
 export async function PUT(request: Request) {
-  try {
-    const body = await request.json();
-    const { id, name, role, cohort, image, quote, full_testimony, highlight, key_takeaways } = body;
-
-    const { data, error } = await supabase
-      .from('testimonials')
-      .update({
-        name,
-        role,
-        cohort,
-        image,
-        quote,
-        full_testimony,
-        highlight,
-        key_takeaways,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error updating testimonial:', error);
-    return NextResponse.json(
-      { error: 'Failed to update testimonial' },
-      { status: 500 }
-    );
-  }
+  const body = await request.json();
+  return NextResponse.json(
+    {
+      error: LOCAL_MODE_MESSAGE,
+      payload: body,
+    },
+    { status: 501 }
+  );
 }
 
 export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
 
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Testimonial ID is required' },
-        { status: 400 }
-      );
-    }
-
-    const { error } = await supabase
-      .from('testimonials')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting testimonial:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete testimonial' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(
+    {
+      error: LOCAL_MODE_MESSAGE,
+      id,
+    },
+    { status: 501 }
+  );
 }

@@ -222,7 +222,7 @@ export default function AdminLayout({
                       </div>
                       <div>
                         <h2 className="font-outfit text-lg font-semibold text-gray-900 dark:text-white">
-                          ADEIPS
+                          ST Brains Modal College
                         </h2>
                         <p className="text-xs text-gray-500 dark:text-gray-400 font-light">Admin Panel</p>
                       </div>

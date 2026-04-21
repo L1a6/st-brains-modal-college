@@ -22,8 +22,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'ADEIPS - Executive Institute of Public Speaking',
-  description: 'Transform your voice, transform your impact. Premier executive training in public speaking.',
+  title: 'ST Brains Modal College - Premium Secondary School in Uyo',
+  description: 'ST Brains Modal College is a premium secondary school located at Wellington Bassey Rd, Uyo, with top-notch staff and modern facilities.',
 };
 
 export default function RootLayout({

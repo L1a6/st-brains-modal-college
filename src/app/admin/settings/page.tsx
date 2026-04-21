@@ -13,7 +13,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<SiteSettings>({
     registration_open: true,
     current_cohort: 15,
-    cohort_message: 'Join our next cohort and transform your speaking skills',
+    cohort_message: 'Enroll for the next session at ST Brains Modal College',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

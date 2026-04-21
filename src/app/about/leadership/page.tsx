@@ -9,10 +9,10 @@ export default function LeadershipPage() {
     <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-[#0A1236] dark:via-[#0d1a40] dark:to-[#0A1236] pt-24">
       {/* Hero Section - Uniform with Gallery/Facilitators */}
       <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1236]/95 via-[#0A1236]/90 to-[#0A1236]/95 z-10"></div>
+        <div className="brand-menu-overlay"></div>
         <div className="absolute inset-0">
           <Image
-            src="/images/hero/hero-3.jpg"
+            src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1920&q=80"
             alt="Leadership"
             fill
             sizes="100vw"
@@ -48,7 +48,7 @@ export default function LeadershipPage() {
           className="text-center mb-20"
         >
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-            Our leadership team brings together decades of experience in education, communication, and organizational excellence. They are the visionaries driving ADEIPS forward.
+            Our leadership team brings together decades of experience in education and school administration, driving ST Brains Modal College toward lasting excellence.
           </p>
         </motion.div>
 
@@ -108,7 +108,7 @@ export default function LeadershipPage() {
                   <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700/50">
                     <div className="flex items-center gap-4">
                       <div className="flex-1 h-[1px] bg-gradient-to-r from-[#0A1236]/20 via-[#E62A2A]/30 to-transparent dark:from-white/20 dark:via-[#E62A2A]/30"></div>
-                      <span className="text-xs font-medium text-[#0A1236] dark:text-white/60 tracking-widest uppercase">ADEIPS Leadership</span>
+                      <span className="text-xs font-medium text-[#0A1236] dark:text-white/60 tracking-widest uppercase">School Leadership</span>
                     </div>
                   </div>
                 </div>

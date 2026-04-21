@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
             </svg>
           </div>
           <h1 className="font-outfit text-3xl font-light text-white mb-2 tracking-wide">
-            ADEIPS Admin
+            ST Brains Modal College Admin
           </h1>
           <p className="text-white/60 text-sm font-light">
             Management Portal

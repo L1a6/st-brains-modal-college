@@ -205,10 +205,10 @@ export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0A1236] pt-24">
       <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1236]/95 via-[#0A1236]/90 to-[#0A1236]/95 z-10"></div>
+        <div className="brand-menu-overlay"></div>
         <div className="absolute inset-0">
           <Image
-            src="/images/hero/hero-2.jpg"
+            src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1920&q=80"
             alt="Gallery"
             fill
             sizes="100vw"
@@ -231,7 +231,7 @@ export default function GalleryPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-outfit text-4xl md:text-6xl font-extralight text-white tracking-tight"
           >
-            Moments of Excellence
+            Campus Facilities Gallery
           </motion.h1>
         </div>
       </section>

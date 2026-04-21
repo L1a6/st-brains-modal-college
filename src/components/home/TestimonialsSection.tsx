@@ -3,48 +3,19 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  cohort: string;
-  image: string;
-  quote: string;
-  full_testimony: string;
-  highlight: string;
-  key_takeaways?: string[];
-}
+import { testimonialsData, Testimonial } from '@/data/testimonials';
 
 export default function TestimonialsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isPausedRef = useRef(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch testimonials effect
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response = await fetch('/api/admin/testimonials');
-        const data = await response.json();
-        setTestimonials(data);
-      } catch (error) {
-        console.error('Error fetching testimonials:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTestimonials();
-  }, []);
+  const [testimonials] = useState<Testimonial[]>(testimonialsData);
 
   // Auto-scroll animation effect - MUST be called before any early returns
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer || loading) return;
+    if (!scrollContainer) return;
 
     let animationId: number;
     let lastTime = Date.now();
@@ -74,7 +45,7 @@ export default function TestimonialsSection() {
       cancelAnimationFrame(animationId);
       if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
     };
-  }, [loading]);
+  }, []);
 
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -93,32 +64,14 @@ export default function TestimonialsSection() {
 
   const doubledTestimonials = [...testimonials, ...testimonials];
 
-  if (loading) {
-    return (
-      <section className="section-spacing bg-[var(--bg-primary)] overflow-hidden">
-        <div className="container-custom mb-8 md:mb-16">
-          <h2 className="font-outfit text-3xl md:text-5xl lg:text-6xl font-extralight text-[var(--adeips-navy)] dark:text-[var(--text-primary)] text-center mb-3 md:mb-4 tracking-tight opacity-0 animate-fade-in-up">
-            Voices of Transformation
-          </h2>
-          <p className="text-center text-[var(--text-secondary)] text-base md:text-lg opacity-0 animate-fade-in animate-delay-200 px-4">
-            Alumni who discovered their authentic voice at ADEIPS
-          </p>
-        </div>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--adeips-navy)] dark:border-white"></div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section className="section-spacing bg-[var(--bg-primary)] overflow-hidden">
       <div className="container-custom mb-8 md:mb-16">
         <h2 className="font-outfit text-3xl md:text-5xl lg:text-6xl font-extralight text-[var(--adeips-navy)] dark:text-[var(--text-primary)] text-center mb-3 md:mb-4 tracking-tight opacity-0 animate-fade-in-up">
-          Voices of Transformation
+          Testimonials from Students
         </h2>
         <p className="text-center text-[var(--text-secondary)] text-base md:text-lg opacity-0 animate-fade-in animate-delay-200 px-4">
-          Alumni who discovered their authentic voice at ADEIPS
+          Real stories from students of ST Brains Modal College
         </p>
       </div>
 

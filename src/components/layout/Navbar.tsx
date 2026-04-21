@@ -2,20 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [aboutDropdown, setAboutDropdown] = useState(false);
   const [blogDropdown, setBlogDropdown] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const [mobileBlogOpen, setMobileBlogOpen] = useState(false);
-  const [lastScroll, setLastScroll] = useState(0);
-  const [hideNav, setHideNav] = useState(false);
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
@@ -23,32 +19,10 @@ export default function Navbar() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = window.pageYOffset;
-      setScrolled(currentScroll > 50);
-      
-      if (window.innerWidth <= 768) {
-        if (currentScroll > lastScroll && currentScroll > 100) {
-          setHideNav(true);
-        } else {
-          setHideNav(false);
-        }
-      }
-      setLastScroll(currentScroll);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScroll]);
-
   const isActive = (path: string) => pathname === path;
 
-  // Determine logo source - using same logo for both modes until dark mode logo is ready
-  const logoSrc = '/images/logo.png';
-
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[10000] transition-all duration-500 ${hideNav ? '-translate-y-full' : 'translate-y-0'}`}>
+    <nav className="fixed top-0 left-0 right-0 z-[10000] transition-all duration-500 translate-y-0">
       <div className="relative overflow-visible h-[72px]">
         <div 
           className="absolute inset-0 backdrop-blur-lg"
@@ -89,15 +63,10 @@ export default function Navbar() {
         ></div>
         
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex justify-between items-center">
-          <Link href="/" className="relative h-[60px] w-60 flex-shrink-0">
-            <Image
-              src={logoSrc}
-              alt="ADEIPS Logo"
-              fill
-              className="object-contain object-left"
-              priority
-              sizes="240px"
-            />
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <span className="font-outfit text-lg md:text-xl font-semibold tracking-tight text-[#8B0000] dark:text-white">
+              ST Brains Modal College
+            </span>
           </Link>
 
           <ul className="hidden md:flex items-center gap-10">
@@ -140,7 +109,7 @@ export default function Navbar() {
                   minWidth: '220px'
                 }}>
                   <Link href="/about" className="block px-5 py-3 text-sm text-gray-800 dark:text-white hover:bg-[#E62A2A]/10 transition-colors">
-                    About ADEIPS
+                    About ST Brains Modal College
                   </Link>
                   <Link href="/about/leadership" className="block px-5 py-3 text-sm text-gray-800 dark:text-white hover:bg-[#E62A2A]/10 transition-colors">
                     Leadership Team
@@ -239,7 +208,7 @@ export default function Navbar() {
                     : 'text-gray-800 dark:text-white hover:text-[#E62A2A]'
                 }`}
               >
-                Enroll
+                Enroll Next Session
               </Link>
             </li>
           </ul>
@@ -311,7 +280,7 @@ export default function Navbar() {
               {mobileAboutOpen && (
                 <div className="pl-4 mt-2 space-y-2">
                   <Link href="/about" className="block py-2 text-sm text-gray-600 dark:text-gray-300" onClick={() => setIsOpen(false)}>
-                    About ADEIPS
+                    About ST Brains Modal College
                   </Link>
                   <Link href="/about/leadership" className="block py-2 text-sm text-gray-600 dark:text-gray-300" onClick={() => setIsOpen(false)}>
                     Leadership Team
@@ -374,7 +343,7 @@ export default function Navbar() {
 
             <li className="py-3">
               <Link href="/enroll" className="text-sm font-normal text-gray-800 dark:text-white" onClick={() => setIsOpen(false)}>
-                Enroll
+                Enroll Next Session
               </Link>
             </li>
           </ul>

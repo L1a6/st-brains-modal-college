@@ -1,24 +1,18 @@
 'use client';
 
-import Image from 'next/image';
-
 export default function Footer() {
   return (
     <footer className="bg-[var(--adeips-navy)] text-white">
       <div className="container-custom py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
-            <div className="relative h-12 w-36 mb-6">
-              <Image
-                src="/images/logo.png"
-                alt="ADEIPS Logo"
-                fill
-                sizes="144px"
-                className="object-contain object-left brightness-0 invert"
-              />
+            <div className="mb-6">
+              <h3 className="font-outfit text-2xl font-semibold tracking-tight text-white">
+                ST Brains Modal College
+              </h3>
             </div>
             <p className="text-white/70 text-sm leading-relaxed mb-6 font-light">
-              AkanDavid Executive Institute of Public Speaking. Transforming professionals into influential communicators through world-class training and mentorship.
+              A premium secondary school in Uyo, committed to academic excellence, character development, and modern learning facilities for future leaders.
             </p>
             <div className="flex gap-4">
               <a
@@ -87,27 +81,27 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a href="/courses" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Opening & Closing For Impact
+                  Junior Secondary
                 </a>
               </li>
               <li>
                 <a href="/courses" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Executive Presence
+                  Senior Secondary
                 </a>
               </li>
               <li>
                 <a href="/courses" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Linguistic Precision
+                  Science Laboratory Practicals
                 </a>
               </li>
               <li>
                 <a href="/courses" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Memory Optimisation
+                  ICT and Digital Skills
                 </a>
               </li>
               <li>
                 <a href="/courses" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Vocal Engineering
+                  Sports and Leadership Development
                 </a>
               </li>
             </ul>
@@ -117,23 +111,23 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-6">Contact</h4>
             <ul className="space-y-3">
               <li>
-                <a href="mailto:adinstituteofpublicspeaking@gmail.com" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  adinstituteofpublicspeaking@gmail.com
+                <a href="mailto:admissions@stbrainsmodalcollege.edu.ng" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
+                  admissions@stbrainsmodalcollege.edu.ng
                 </a>
               </li>
               <li>
-                <a href="tel:+2348137173927" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  +234 813 717 3927
+                <a href="tel:+2348100000000" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
+                  +234 810 000 0000
                 </a>
               </li>
               <li>
                 <span className="text-white/70 text-sm font-light">
-                  Uyo, Nigeria
+                  Wellington Bassey Rd, Uyo
                 </span>
               </li>
               <li>
                 <a href="#enroll" className="text-white/70 hover:text-[var(--adeips-red)] transition-colors text-sm font-light">
-                  Apply Now
+                  Enroll Next Session
                 </a>
               </li>
             </ul>
@@ -142,7 +136,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-8 text-center">
           <p className="text-white/60 text-sm mb-4 font-light">
-            &copy; 2025 ADEIPS - Executive Institute of Public Speaking. All rights reserved.
+            &copy; 2026 ST Brains Modal College. All rights reserved.
           </p>
           <div className="flex items-center justify-center gap-2">
             <span className="text-white/40 text-[10px] font-light tracking-wider">Powered by</span>
