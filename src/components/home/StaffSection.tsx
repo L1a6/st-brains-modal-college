@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
+import Script from 'next/script';
 
 type StaffCard = {
   id: string;
@@ -13,42 +14,39 @@ type StaffCard = {
 };
 
 export default function StaffSection() {
-  const initialCards = useMemo<StaffCard[]>(
-    () => [
-      {
-        id: 'teacher-1',
-        name: 'Amina Okon',
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80',
-        status: 'Online',
-        rating: '4.5',
-        learners: '3.1 K',
-        description: 'English teacher building confident communication and clear expression.',
-      },
-      {
-        id: 'teacher-2',
-        name: 'Chinonso Etim',
-        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&q=80',
-        status: 'Online',
-        rating: '4.0',
-        learners: '2.4 K',
-        description: 'Mathematics teacher turning complex concepts into simple, practical steps.',
-      },
-      {
-        id: 'teacher-3',
-        name: 'David Effiong',
-        image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=900&q=80',
-        status: 'Offline',
-        rating: '5.0',
-        learners: '1.7 K',
-        description: 'Science teacher guiding students with data-driven, hands-on learning.',
-      },
-    ],
-    []
-  );
+  const [cards, setCards] = useState<StaffCard[]>([
+    {
+      id: 'teacher-1',
+      name: 'Amina Okon',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80',
+      status: 'Online',
+      rating: '4.8',
+      learners: '3.1 K',
+      description: 'English teacher building confident communication and clear expression.',
+    },
+    {
+      id: 'teacher-2',
+      name: 'Chinonso Etim',
+      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&q=80',
+      status: 'Online',
+      rating: '4.5',
+      learners: '2.4 K',
+      description: 'Mathematics teacher turning complex concepts into simple, practical steps.',
+    },
+    {
+      id: 'teacher-3',
+      name: 'David Effiong',
+      image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=900&q=80',
+      status: 'Offline',
+      rating: '5.0',
+      learners: '1.7 K',
+      description: 'Science teacher guiding students with data-driven, hands-on learning.',
+    },
+  ]);
 
-  const [cards, setCards] = useState<StaffCard[]>(initialCards);
   const [dragId, setDragId] = useState<string | null>(null);
   const [handleReadyId, setHandleReadyId] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const play = (file: string, volume = 0.5) => {
     const audio = new Audio(file);
@@ -61,17 +59,18 @@ export default function StaffSection() {
       event.preventDefault();
       return;
     }
-
     setDragId(id);
     document.body.classList.add('grabbing');
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', id);
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', id);
+    }
     play('https://cdn.freesound.org/previews/582/582898_5965684-lq.mp3');
   };
 
   const handleDrop = (targetId: string) => (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const sourceId = event.dataTransfer.getData('text/plain') || dragId;
+    const sourceId = event.dataTransfer?.getData('text/plain') || dragId;
 
     if (!sourceId || sourceId === targetId) {
       document.body.classList.remove('grabbing');
@@ -96,206 +95,237 @@ export default function StaffSection() {
   };
 
   return (
-    <section className="section-spacing bg-[var(--bg-primary)] staff-shell">
-      <div className="container-custom">
-        <header className="header">
-          <a href="/about" className="made" aria-label="Our teachers" role="tooltip">
-            <div className="by">OUR STAFF</div>
-            <div className="logo">
-              <img
-                src="https://i.imgur.com/aNnuxjo.png"
-                alt="logo"
-                className="logo-img"
-                draggable={false}
-              />
-              <div className="logo-text">ST Brains</div>
-            </div>
-          </a>
-        </header>
+    <section className="brains-staff-wrapper" ref={containerRef}>
+      <header className="header">
+        <a href="https://turbokit.io/" target="_blank" rel="noreferrer" className="made" aria-label="✦ the fastest website template ✦" role="tooltip">
+          <div className="by">MADE BY</div>
+          <div className="logo">
+            <img src="https://i.imgur.com/aNnuxjo.png" alt="logo" className="logo-img" draggable="false" />
+            <div className="logo-text">TurboKit</div>
+          </div>
+        </a>
+      </header>
 
-        <section className="cards" aria-label="Staff profile cards">
-          {cards.map((staff) => (
-            <div
-              key={staff.id}
-              draggable
-              onDragStart={handleDragStart(staff.id)}
-              onDragEnd={() => {
-                document.body.classList.remove('grabbing');
-                setDragId(null);
-                setHandleReadyId(null);
-              }}
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={handleDrop(staff.id)}
-              className={`card-wrap ${dragId === staff.id ? 'is-dragging' : ''}`}
-            >
-              <div className="card">
-                <div className="card-filter" />
-                <img src={staff.image} alt={staff.name} className="card-bg" draggable={false} />
+      <section className="cards">
+        {cards.map((staff) => (
+          <div
+            className={\`card-wrap \${dragId === staff.id ? 'is-dragging' : ''}\`}
+            key={staff.id}
+            draggable
+            onDragStart={handleDragStart(staff.id)}
+            onDragEnd={() => {
+              document.body.classList.remove('grabbing');
+              setDragId(null);
+              setHandleReadyId(null);
+            }}
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={handleDrop(staff.id)}
+          >
+            <div className="card">
+              <div className="card-filter"></div>
+              <img src={staff.image} alt="bg" className="card-bg" draggable="false" />
 
-                <div className="card-status">
-                  <div className={`card-status-dot ${staff.status === 'Online' ? 'online' : 'offline'}`} />
-                  <div className="card-status-text">{staff.status}</div>
-                </div>
-
-                <div
-                  className="card-handle grab"
-                  onMouseDown={() => setHandleReadyId(staff.id)}
-                  onMouseUp={() => setHandleReadyId(null)}
-                  onMouseLeave={() => setHandleReadyId(null)}
-                >
-                  <div className="card-handle-tip" aria-label="Drag" role="tooltip">
-                    <svg className="handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="card-content">
-                  <div className="card-name-wrap">
-                    <div className="card-name">{staff.name}</div>
-                    <div className="card-verified" aria-label="Verified" role="tooltip">
-                      ✓
-                    </div>
-                  </div>
-
-                  <div className="card-tags">
-                    <div className="card-tag">
-                      <div className="card-rating-text">{staff.rating}</div>
-                      <div className="card-rating-stars">★★★★★</div>
-                    </div>
-                    <div className="card-tag">
-                      <div className="card-rating-text">{staff.learners}</div>
-                    </div>
-                  </div>
-
-                  <div className="card-description">{staff.description}</div>
-
-                  <a href="/about/facilitators" className="card-button pointer">
-                    <div className="card-button-text pointer">Get In Touch</div>
-                    <div className="card-button-call pointer">
-                      <svg className="card-button-call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.62a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6.27 6.27l1.28-1.28a2 2 0 0 1 2.11-.45c.84.3 1.72.51 2.62.63A2 2 0 0 1 22 16.92z" />
-                      </svg>
-                    </div>
-                  </a>
-                </div>
-
-                <div className="card-fade" />
+              <div className="card-status">
+                <div className={\`card-status-dot \${staff.status === 'Online' ? 'online' : 'offline'}\`}></div>
+                <div className="card-status-text">{staff.status}</div>
               </div>
-            </div>
-          ))}
-        </section>
 
-        <footer className="footer">
-          <a className="follow" href="/about/facilitators">
-            <div className="by">MORE ABOUT OUR STAFF?</div>
-            <div className="follow-x">
-              <div className="follow-logo">S</div>
-              <div className="follow-text">
-                <div className="follow-us">explore</div>
-                <div className="follow-handle">our team</div>
+              <div
+                className="card-handle grab"
+                onMouseDown={() => setHandleReadyId(staff.id)}
+                onMouseUp={() => setHandleReadyId(null)}
+                onMouseLeave={() => setHandleReadyId(null)}
+                onTouchStart={() => setHandleReadyId(staff.id)}
+                onTouchEnd={() => setHandleReadyId(null)}
+              >
+                <div className="card-handle-tip" aria-label="Drag" role="tooltip">
+                  <span className="iconify handle" data-icon="ic:outline-drag-indicator"></span>
+                </div>
               </div>
-            </div>
-          </a>
-        </footer>
-      </div>
 
-      <style jsx>{`
-        .staff-shell {
+              <div className="card-content">
+                <div className="card-name-wrap">
+                  <div className="card-name">{staff.name}</div>
+                  <div className="card-verfied" aria-label="Verified" role="tooltip">
+                    <span className="card-verification iconify" data-icon="si:verified-fill"></span>
+                  </div>
+                </div>
+
+                <div className="card-tags">
+                  <div className="card-tag">
+                    <div className="card-rating-text">{staff.rating}</div>
+                    <div className="card-rating-stars">
+                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
+                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
+                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
+                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
+                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
+                    </div>
+                  </div>
+                  <div className="card-tag">
+                    <span className="iconify card-tag-icon" data-icon="line-md:account"></span>
+                    <div className="card-rating-text">{staff.learners}</div>
+                  </div>
+                </div>
+
+                <div className="card-description">
+                  {staff.description}
+                </div>
+
+                <div className="card-button pointer">
+                  <div className="card-button-text pointer">Get In Touch</div>
+                  <div className="card-button-call pointer">
+                    <span className="card-button-call-icon iconify pointer" data-icon="line-md:phone-call-loop"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card-fade"></div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <footer className="footer">
+        <a className="follow" href="https://x.com/turbokitHQ" target="_blank" rel="noreferrer">
+          <div className="by">MORE LIKE THIS?</div>
+          <div className="follow-x">
+            <div className="follow-logo">
+              <span className="iconify" data-icon="line-md:twitter-x"></span>
+            </div>
+            <div className="follow-text">
+              <div className="follow-us">follow us</div>
+              <div className="follow-handle">@turbokitHQ</div>
+            </div>
+          </div>
+        </a>
+      </footer>
+
+      {/* Required for the icons */}
+      <Script src="https://code.iconify.design/3/3.1.0/iconify.min.js" strategy="lazyOnload" />
+
+      <style dangerouslySetInnerHTML={{ __html: \`
+        /*=================
+               VARS
+        ===================*/
+        .brains-staff-wrapper {
           --bg: #ffffff;
-          --text: #ffffff;
-          --accent: #000000;
-          --radius: 2.5rem;
+          --text: #000000;
+          --accent: #dc2626; /* BRAND RED for call icon */
+          --radius: 2.5rem; /* Pill shape! */
           --shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
           --anim: cubic-bezier(0, 0, 0.25, 1);
-          --brand-red: var(--adeips-red);
+          
+          background: #ffffff; /* BRAND COLOR: WHITE BACKGROUND */
+          color: #000;
+          display: flex;
+          flex-flow: column;
+          padding: 4rem 0;
+          min-height: 100vh;
+          cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMyIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDI0IDI0Ij4KCTxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzlkOWQ5ZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJtMyAzbDcgMTlsMi4wNTEtNi4xNTRhNiA2IDAgMCAxIDMuNzk1LTMuNzk1TDIyIDEweiIgLz4KPC9zdmc+"), default;
         }
-
-        a {
-          text-decoration: none;
+        
+        .brains-staff-wrapper * {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          font-family: inherit;
         }
-
-        .pointer,
-        a,
-        button {
-          cursor: pointer;
+        
+        .brains-staff-wrapper *::selection {
+          background: rgba(220, 38, 38, 0.3);
         }
-
-        .grab {
-          cursor: grab;
+        
+        .brains-staff-wrapper .pointer,
+        .brains-staff-wrapper a,
+        .brains-staff-wrapper button {
+          cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMyIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDE0IDE0Ij4KCTxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2I1YjFiMSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTAuNSA2LjEzYTIgMiAwIDAgMSAxLjU5IDIuMjRsLS42MSA0LjI3YTEgMSAwIDAgMS0xIC44Nkg0YTEgMSAwIDAgMS0uOTMtLjYzTDIgMTAuMjFhMiAyIDAgMCAxIDEtMi41M0w0LjM1IDdWMmExLjUgMS41IDAgMCAxIDMgMHYzLjV6IiBzdHJva2Utd2lkdGg9IjEiIC8+Cjwvc3ZnPg=="), default;
         }
-
-        .is-dragging,
-        .is-dragging .grab {
-          cursor: grabbing;
+        
+        .brains-staff-wrapper .grab {
+          cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMyIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDI0IDI0Ij4KCTxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y5ZjlmOSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPgoJCTxwYXRoIGQ9Ik0xOCAxMS41VjlhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDAtMiAydjEuNG0wLS40VjhhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDAtMiAydjJtMC0uMVY5YTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMnY1bTAgMGEyIDIgMCAwIDAtMi0yYTIgMiAwIDAgMC0yIDIiIC8+CgkJPHBhdGggZD0iTTE4IDExYTIgMiAwIDEgMSA0IDB2M2E4IDggMCAwIDEtOCA4aC00YTggOCAwIDAgMS04LThhMiAyIDAgMSAxIDQgMCIgLz4KCTwvZz4KPC9zdmc+"), grab;
         }
-
-        .by {
+        
+        /* The global grabbing cursor is handled via JS document.body.classList */
+        body.grabbing {
+          cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMyIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDI0IDI0Ij4KCTxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPgoJCTxwYXRoIGQ9Ik0xOCAxMS41VjlhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDAtMiAydjEuNG0wLS40VjhhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDAtMiAydjJtMC0uMVY5YTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMnY1bTAgMGEyIDIgMCAwIDAtMi0yYTIgMiAwIDAgMC0yIDIiIC8+CgkJPHBhdGggZD0iTTE4IDExYTIgMiAwIDEgMSA0IDB2M2E4IDggMCAwIDEtOCA4aC00YTggOCAwIDAgMS04LThhMiAyIDAgMSAxIDQgMCIgLz4KCTwvZz4KPC9zdmc+"), grabbing !important;
+        }
+        
+        .brains-staff-wrapper .by {
           font-size: 0.5rem;
           opacity: 0.5;
           letter-spacing: 0.2rem;
           text-align: center;
           display: flex;
           justify-content: center;
+          align-content: center;
           margin-bottom: 0.15rem;
-          text-transform: uppercase;
         }
-
-        .header {
+        
+        .brains-staff-wrapper .header {
           display: flex;
           justify-content: center;
           align-items: center;
           flex-flow: column;
-          margin: 0 0 2.5rem 0;
+          margin: 3rem 0 4rem 0;
         }
-
-        .logo {
+        
+        .brains-staff-wrapper .logo {
           display: flex;
           align-items: center;
           justify-content: center;
           margin-left: -1rem;
         }
-
-        .made {
-          color: var(--adeips-navy);
+        
+        .brains-staff-wrapper .made {
+          color: black; /* Contrast to full white background */
           justify-content: center;
           align-items: center;
           flex-flow: column;
-          opacity: 0.8;
-          display: flex;
+          opacity: 0;
+          animation: madeIn 0.8s forwards;
         }
-
-        .logo-img {
+        
+        @keyframes madeIn {
+          from { opacity: 0; transform: scale(0.75); }
+          to { opacity: 0.75; transform: scale(1); }
+        }
+        
+        .brains-staff-wrapper .made:hover {
+          opacity: 1;
+          transform: scale(1.02);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .brains-staff-wrapper .logo-img {
           height: 1.75rem;
           margin-right: 0.3rem;
           pointer-events: none;
           user-select: none;
+          filter: invert(1); /* the original logo is white, invert makes it black since on white background */
         }
-
-        .logo-text {
+        
+        .brains-staff-wrapper .logo-text {
           font-weight: 800;
           font-size: 1.3rem;
         }
-
-        .cards {
+        
+        /*=================
+               CARDS
+        ===================*/
+        .brains-staff-wrapper .cards {
           display: flex;
           justify-content: center;
           align-items: center;
           flex-wrap: wrap;
-          width: 100%;
+          width: 100vw;
+          max-width: 100%;
         }
-
-        .card-wrap {
+        
+        .brains-staff-wrapper .card-wrap {
           position: relative;
-          transition: transform 0.25s var(--anim);
         }
-
-        .card-wrap.is-dragging {
-          transform: rotate(3deg) scale(0.98);
-          z-index: 99;
-        }
-
-        .card-filter {
+        
+        .brains-staff-wrapper .card-filter {
           position: absolute;
           height: 100%;
           width: 100%;
@@ -308,13 +338,8 @@ export default function StaffSection() {
           opacity: 0;
           transition: opacity 0.1s var(--anim);
         }
-
-        .card-wrap:hover .card-filter,
-        .card-wrap.is-dragging .card-filter {
-          opacity: 1;
-        }
-
-        .card {
+        
+        .brains-staff-wrapper .card {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
@@ -328,44 +353,59 @@ export default function StaffSection() {
           margin: 1rem;
           padding: 1rem;
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(0, 0, 0, 0.1); /* Adjusted border for light mode */
           border-radius: var(--radius);
           box-shadow: var(--shadow);
           position: relative;
-          transition: opacity 0.4s var(--anim), transform 0.3s var(--anim);
-          background: #0a1236;
+          color: white; /* Ensures text over image is white */
+          background: rgba(0,0,0,0.8);
+          animation: cardIn 0.8s forwards;
+          transition: transform 0.3s var(--anim);
         }
-
-        .card-bg {
+        
+        .brains-staff-wrapper .card-wrap.is-dragging .card {
+          opacity: 0.5 !important;
+          filter: blur(0.5rem) !important;
+          transform: scale(0.8) !important;
+          box-shadow: none;
+          border: none;
+        }
+        
+        @keyframes cardIn {
+          from { opacity: 0; filter: blur(1rem); }
+          to { opacity: 1; filter: blur(0); }
+        }
+        
+        .brains-staff-wrapper .card-bg {
           position: absolute;
           top: 0;
           left: 0;
           height: 100%;
-          width: 100%;
           z-index: -1;
           pointer-events: none;
           user-select: none;
           object-fit: cover;
-          transition: transform 0.8s ease;
+          animation: pulseBg 15s infinite alternate linear;
         }
-
-        .card-wrap:hover .card-bg {
-          transform: scale(1.08);
+        
+        @keyframes pulseBg {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.2); }
         }
-
-        .card-content {
+        
+        .brains-staff-wrapper .card-content {
           position: relative;
           z-index: 3;
           padding: 0 0.25rem;
-          width: 100%;
+          width: 100%; /* For full layout inside */
         }
-
-        .card-status {
+        
+        .brains-staff-wrapper .card-status {
           margin: 0.25rem 0;
           display: flex;
           justify-content: center;
           align-items: center;
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(0.5rem);
           width: 5rem;
           height: 1.5rem;
@@ -376,8 +416,8 @@ export default function StaffSection() {
           pointer-events: none;
           user-select: none;
         }
-
-        .card-status-dot {
+        
+        .brains-staff-wrapper .card-status-dot {
           height: 0.3rem;
           width: 0.3rem;
           border-radius: 50%;
@@ -387,35 +427,32 @@ export default function StaffSection() {
           align-items: center;
           margin-right: 0.75rem;
         }
-
-        .card-status-dot:after {
-          content: '';
+        
+        @keyframes pulse {
+          from { transform: scale(1); opacity: 1; }
+          to { transform: scale(3); opacity: 0; }
+        }
+        
+        .brains-staff-wrapper .card-status-dot:after {
+          content: "";
           height: 100%;
           width: 100%;
           background: inherit;
           border-radius: 50%;
           animation: pulse 1s var(--anim) infinite;
         }
-
-        .card-status-dot.online {
-          background: mediumseagreen;
-        }
-
-        .card-status-dot.offline {
-          background: grey;
-        }
-
-        .card-status-dot.offline:after {
-          animation: none;
-        }
-
-        .card-status-text {
+        
+        .brains-staff-wrapper .card-status-dot.online { background: mediumseagreen; }
+        .brains-staff-wrapper .card-status-dot.offline { background: grey; }
+        .brains-staff-wrapper .card-status-dot.offline:after { animation: none; }
+        
+        .brains-staff-wrapper .card-status-text {
           font-size: 0.7rem;
-          opacity: 0.85;
-          color: #fff;
+          opacity: 0.9;
+          color: white;
         }
-
-        .card-handle {
+        
+        .brains-staff-wrapper .card-handle {
           background: rgba(255, 255, 255, 0.4);
           backdrop-filter: blur(0.1rem);
           border-radius: var(--radius);
@@ -424,141 +461,151 @@ export default function StaffSection() {
           right: 1rem;
           height: 2.5rem;
           width: 2.5rem;
-          border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
-          color: #111;
+          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .card-handle-tip {
+        
+        .brains-staff-wrapper .card-handle:hover {
+          transform: scale(0.95);
+        }
+        
+        .brains-staff-wrapper .card-handle-tip {
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100%;
           width: 100%;
         }
-
-        .handle {
+        
+        .brains-staff-wrapper .handle {
           width: 100%;
           height: 1.25rem;
+          color: black;
         }
-
-        .card-name-wrap {
+        
+        .brains-staff-wrapper .card-name-wrap {
           width: 100%;
           display: flex;
           align-items: center;
           margin: 0.75rem 0;
+          animation: slideUpIn 0.8s 0.3s both;
         }
-
-        .card-name {
-          font-size: 1.2rem;
+        
+        @keyframes slideUpIn {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .brains-staff-wrapper .card-name {
+          font-size: 1.25rem;
           font-weight: 700;
           margin-right: 0.5rem;
-          color: #fff;
+          color: white;
         }
-
-        .card-verified {
-          font-size: 0.95rem;
-          color: #fff;
-          width: 1.1rem;
-          height: 1.1rem;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.22);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+        
+        .brains-staff-wrapper .card-verfied {
+          font-size: 1.25rem;
         }
-
-        .card-tags {
+        
+        .brains-staff-wrapper .card-verification {
+          color: white;
+          filter: drop-shadow(0 0 0.5rem black);
+        }
+        
+        .brains-staff-wrapper .card-tags {
           display: flex;
           align-items: center;
           flex-flow: row;
           margin: 0.5rem 0;
         }
-
-        .card-tag {
+        
+        .brains-staff-wrapper .card-tag {
           display: flex;
           justify-content: center;
           align-items: center;
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(0.5rem);
           padding: 0.3rem 0.5rem;
           border-radius: var(--radius);
           font-size: 0.75rem;
           margin-right: 0.5rem;
+          color: white;
           pointer-events: none;
-          color: #fff;
         }
-
-        .card-rating-text {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-right: 0.5rem;
-        }
-
-        .card-rating-stars {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 0.5rem;
-        }
-
-        .card-description {
-          color: #fff;
+        
+        .brains-staff-wrapper .card-tag-icon { margin-right: 0.25rem; }
+        .brains-staff-wrapper .card-rating-text { display: flex; justify-content: center; align-items: center; margin-right: 0.3rem; }
+        .brains-staff-wrapper .card-rating-star { font-size: 0.5rem; }
+        .brains-staff-wrapper .card-rating-stars { display: flex; justify-content: center; align-items: center; }
+        
+        .brains-staff-wrapper .card-description {
           font-size: 0.8rem;
           line-height: 1.6;
           font-weight: 300;
           margin: 0.5rem 0 1rem 0;
+          opacity: 0;
+          animation: fadeInText 0.8s 0.5s both;
         }
-
-        .card-button {
+        
+        @keyframes fadeInText {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 0.9; }
+        }
+        
+        .brains-staff-wrapper .card-button {
           padding: 0.3rem 0.3rem 0.3rem 0.5rem;
-          border-radius: var(--radius);
+          border-radius: var(--radius); /* This is 2.5rem which is a PILL SHAPE! */
           background: rgba(255, 255, 255, 0.2);
-          color: var(--bg);
+          color: white !important;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          transition: background 0.2s var(--anim);
+          transition: background 0.3s var(--anim), transform 0.2s var(--anim);
         }
-
-        .card-wrap:hover .card-button {
-          background: var(--brand-red);
+        
+        /* BRAND RED ONLY ON HOVER */
+        .brains-staff-wrapper .card:hover .card-button {
+          background: var(--accent); /* #dc2626 */
         }
-
-        .card-button-call {
-          background: var(--bg);
+        
+        .brains-staff-wrapper .card-button:active {
+          transform: scale(1.05);
+        }
+        
+        .brains-staff-wrapper .card-button-call {
+          background: white;
           min-height: 2.5rem;
           min-width: 2.5rem;
           border-radius: 50%;
-          color: var(--accent);
+          color: black;
           display: flex;
           justify-content: center;
           align-items: center;
           text-align: center;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
         }
-
-        .card-button-text {
+        
+        .brains-staff-wrapper .card-button-text {
           margin-left: 0.5rem;
           font-weight: 500;
           letter-spacing: -0.02rem;
           word-spacing: 0.05rem;
           font-size: 0.85rem;
+          color: white;
         }
-
-        .card-button-call-icon {
+        
+        .brains-staff-wrapper .card-button-call-icon {
           display: flex;
           justify-content: center;
           align-items: center;
           text-align: center;
-          width: 1.1rem;
-          height: 1.1rem;
+          width: 100%;
+          font-size: 1.2rem;
         }
-
-        .card-fade {
+        
+        .brains-staff-wrapper .card-fade {
           position: absolute;
           bottom: 0;
           left: 0;
@@ -568,31 +615,47 @@ export default function StaffSection() {
           opacity: 0.75;
           background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
           pointer-events: none;
+          transition: opacity 0.3s var(--anim);
         }
-
-        .footer {
-          margin: 2.5rem 0 0;
+        
+        .brains-staff-wrapper .card:hover .card-fade {
+          opacity: 1; /* Darkens the gradient to highlight the red button on hover */
+        }
+        
+        /*=================
+               FOOTER
+        ===================*/
+        .brains-staff-wrapper .footer {
+          margin: 4rem 0;
           display: flex;
           justify-content: center;
           align-items: center;
         }
-
-        .follow {
-          color: var(--adeips-navy);
+        
+        .brains-staff-wrapper .follow {
+          color: black; /* contrast to white background */
           display: flex;
           justify-content: center;
           align-items: center;
           flex-flow: column;
+          animation: madeIn 0.8s 0.25s forwards;
+          opacity: 0;
         }
-
-        .follow-x {
+        
+        .brains-staff-wrapper .follow:hover {
+          opacity: 1;
+          transform: scale(1.03);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .brains-staff-wrapper .follow-x {
           display: flex;
           justify-content: center;
           align-items: center;
           margin: 1rem 0;
         }
-
-        .follow-logo {
+        
+        .brains-staff-wrapper .follow-logo {
           height: 2rem;
           width: 2rem;
           display: flex;
@@ -600,42 +663,29 @@ export default function StaffSection() {
           align-items: center;
           border-radius: 0.5rem;
           margin-right: 0.5rem;
-          color: #fff;
-          background: var(--adeips-navy);
-          font-size: 0.8rem;
-          font-weight: 700;
+          color: white;
+          background: black; /* invert due to white background */
         }
-
-        .follow-text {
+        
+        .brains-staff-wrapper .follow-text {
           font-size: 0.8rem;
           font-weight: 600;
           display: flex;
           justify-content: center;
           flex-flow: column;
         }
-
-        .follow-us {
+        
+        .brains-staff-wrapper .follow-us {
           text-transform: uppercase;
           opacity: 0.5;
           font-size: 0.7rem;
         }
-
-        .follow-handle {
+        
+        .brains-staff-wrapper .follow-handle {
           font-weight: 700;
           margin: 0.25rem 0;
         }
-
-        @keyframes pulse {
-          from {
-            transform: scale(1);
-            opacity: 1;
-          }
-          to {
-            transform: scale(3);
-            opacity: 0;
-          }
-        }
-      `}</style>
+      \` }} />
     </section>
   );
 }
