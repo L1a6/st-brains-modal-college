@@ -24,22 +24,25 @@ type StaffCard = {
 };
 
 export default function StaffSection() {
+  const profileNames = ['Amina Okon', 'Chinonso Etim', 'David Effiong'];
+  const profileTitles = ['Lead Facilitator', 'Senior Facilitator', 'STEM Facilitator'];
+
   const initialCards = useMemo<StaffCard[]>(
     () =>
       facilitators.slice(0, 3).map((staff, index) => ({
         id: staff.id,
-        name: staff.name,
-        title: staff.title,
+        name: profileNames[index] || staff.name,
+        title: profileTitles[index] || staff.title,
         image: staffImages[index] || staff.image,
         status: index === 2 ? 'Offline' : 'Online',
         rating: index === 0 ? '4.5' : index === 1 ? '4.0' : '5.0',
         learners: index === 0 ? '3.1K' : index === 1 ? '2.4K' : '1.7K',
         description:
           index === 0
-            ? 'Digital product designer crafting intuitive, scalable user journeys.'
+            ? 'Builds confident communication and academic clarity for students.'
             : index === 1
-              ? 'Digital designer turning complex workflows into seamless journeys.'
-              : 'UX strategist designing frictionless, data-driven digital experiences.',
+              ? 'Leads structured learning pathways that improve outcomes consistently.'
+              : 'Drives practical science coaching with measurable progress.',
         specializations: staff.specializations || [],
       })),
     []
@@ -448,6 +451,7 @@ export default function StaffSection() {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          min-height: 2.5rem;
           transition: background 0.2s var(--anim), transform 0.2s var(--anim);
           text-decoration: none;
         }
@@ -455,6 +459,10 @@ export default function StaffSection() {
         .card-wrap:hover .card-button {
           background: var(--staff-red);
           transform: translateY(-1px);
+        }
+
+        .card-wrap:not(:hover) .card-button {
+          background: rgba(255, 255, 255, 0.2);
         }
 
         .card-button-call {

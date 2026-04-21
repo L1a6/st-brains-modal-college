@@ -1,5 +1,6 @@
 'use client';
 
+import { createElement } from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -86,13 +87,13 @@ export default function ClosingSection() {
 
             {/* Lottie Player */}
             <div className="w-[300px] h-[300px] md:w-[430px] md:h-[430px] lg:w-[500px] lg:h-[500px]">
-              <dotlottie-player
-                src="/education new color scheme.lottie"
-                loop
-                autoplay
-                speed="1.12"
-                style={{ width: '100%', height: '100%' }}
-              />
+              {createElement('dotlottie-player', {
+                src: '/education new color scheme.lottie',
+                loop: true,
+                autoplay: true,
+                speed: '1.12',
+                style: { width: '100%', height: '100%' },
+              })}
             </div>
 
             {/* Static glow behind animation */}
