@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface BlogPost {
   id: string;
@@ -49,9 +50,8 @@ export default function EditBlogPostPage() {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`/api/blog/${id}`);
-      if (response.ok) {
-        const data = await response.json();
+      const data = await safeJsonFetch<{ post?: BlogPost }>(`/api/blog/${id}`);
+      if (data.post) {
         setFormData(data.post);
         if (data.post.image_url) {
           setImagePreview(data.post.image_url);
@@ -81,17 +81,15 @@ export default function EditBlogPostPage() {
       const uploadData = new FormData();
       uploadData.append('file', file);
 
-      const response = await fetch('/api/upload', {
+      const data = await safeJsonFetch<{ url?: string; error?: string }>('/api/upload', {
         method: 'POST',
         body: uploadData,
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (data.url) {
         setFormData({ ...formData, image_url: data.url });
       } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to upload image');
+        alert(data.error || 'Failed to upload image');
       }
     } catch (error) {
       console.error('Error uploading image:', error);

@@ -1,5 +1,6 @@
 'use client';
 
+import { createElement } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -33,7 +34,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-sm tracking-[0.3em] uppercase text-white/90 mb-4"
           >
-            About Us
+            About Our School
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -56,12 +57,12 @@ export default function AboutPage() {
             className="rounded-3xl bg-[#F7FAFF] dark:bg-[#0D1D3D] p-6 md:p-8 border border-blue-100 dark:border-blue-900/50"
           >
             <div className="w-full h-[320px] md:h-[420px]">
-              <dotlottie-player
-                src="/education.lottie"
-                loop
-                autoplay
-                style={{ width: '100%', height: '100%' }}
-              />
+              {createElement('dotlottie-player', {
+                src: '/education.lottie',
+                loop: true,
+                autoplay: true,
+                style: { width: '100%', height: '100%' },
+              })}
             </div>
           </motion.div>
 
@@ -99,7 +100,7 @@ export default function AboutPage() {
               </Link>
               <Link
                 href="/enroll"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-full text-sm font-medium text-[var(--adeips-navy)] bg-white border border-[var(--adeips-red)]/30 hover:bg-red-50/60 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-full text-sm font-medium text-[var(--adeips-red)] bg-white border border-[var(--adeips-red)]/35 hover:bg-[var(--adeips-red)]/8 transition-all duration-300"
               >
                 Enroll Next Session
               </Link>

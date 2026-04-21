@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 export default function NewBlogPostPage() {
   const router = useRouter();
@@ -40,17 +41,15 @@ export default function NewBlogPostPage() {
       const uploadData = new FormData();
       uploadData.append('file', file);
 
-      const response = await fetch('/api/upload', {
+      const data = await safeJsonFetch<{ url?: string; error?: string }>('/api/upload', {
         method: 'POST',
         body: uploadData,
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (data.url) {
         setFormData({ ...formData, image_url: data.url });
       } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to upload image');
+        alert(data.error || 'Failed to upload image');
         setImagePreview(null);
       }
     } catch (error) {

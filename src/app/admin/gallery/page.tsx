@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { createClient } from '@supabase/supabase-js';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,8 +46,7 @@ export default function AdminGalleryPage() {
 
   const fetchImages = async () => {
     try {
-      const response = await fetch('/api/admin/gallery');
-      const data = await response.json();
+      const data = await safeJsonFetch<GalleryImage[]>('/api/admin/gallery');
       if (Array.isArray(data)) {
         setImages(data);
       }

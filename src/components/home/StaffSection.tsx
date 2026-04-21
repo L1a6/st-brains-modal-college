@@ -18,19 +18,13 @@ type StaffCard = {
 };
 
 export default function StaffSection() {
-  const curatedImages = [
-    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80',
-    'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&q=80',
-    'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=1200&q=80',
-  ];
-
   const initialCards = useMemo<StaffCard[]>(
     () =>
       facilitators.slice(0, 3).map((staff, index) => ({
         id: staff.id,
         name: staff.name,
         title: staff.title,
-        image: curatedImages[index] || staff.image,
+        image: staff.image,
         status: index === 2 ? 'Offline' : 'Online',
         rating: index === 0 ? '4.8' : index === 1 ? '4.6' : '4.9',
         learners: index === 0 ? '3.1K' : index === 1 ? '2.4K' : '1.7K',
@@ -42,7 +36,7 @@ export default function StaffSection() {
               : 'Drives practical science coaching and analytical growth.',
         specializations: staff.specializations || [],
       })),
-    [curatedImages]
+    []
   );
 
   const [cards, setCards] = useState<StaffCard[]>(initialCards);
@@ -98,10 +92,10 @@ export default function StaffSection() {
             Meet Our Staff
           </p>
           <h2 className="font-outfit text-3xl md:text-5xl lg:text-6xl font-light text-[var(--adeips-navy)] dark:text-white tracking-tight mb-4">
-            Exceptional Educators. Trusted Mentors.
+            Meet the People Behind the School
           </h2>
           <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-3xl mx-auto">
-            Our facilitators combine academic depth with personal mentorship to help every student grow with confidence.
+            Our facilitators pair academic depth with steady mentorship and a strong school culture.
           </p>
         </div>
 
@@ -171,7 +165,7 @@ export default function StaffSection() {
                   <div className="card-description">{staff.description}</div>
 
                   <Link href="/about/facilitators" className="card-button pointer">
-                    <div className="card-button-text pointer">View Profile</div>
+                    <div className="card-button-text pointer">Get In Touch</div>
                     <div className="card-button-call pointer">
                       <svg className="card-button-call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -197,8 +191,8 @@ export default function StaffSection() {
 
       <style jsx>{`
         .staff-ux {
-          --staff-red: #c81d25;
-          --staff-red-hover: #b41820;
+          --staff-red: var(--adeips-red);
+          --staff-red-hover: #b91c1c;
           --radius: 2rem;
           --anim: cubic-bezier(0, 0, 0.25, 1);
         }
@@ -274,7 +268,7 @@ export default function StaffSection() {
           flex-direction: column;
           align-items: flex-end;
           justify-content: flex-end;
-          height: 23rem;
+          height: 24rem;
           width: 15rem;
           padding: 1rem;
           overflow: hidden;
@@ -448,25 +442,29 @@ export default function StaffSection() {
         }
 
         .card-button {
-          padding: 0.3rem 0.3rem 0.3rem 0.6rem;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.2);
+          padding: 0.28rem 0.28rem 0.28rem 0.55rem;
+          border-radius: 1.15rem;
+          background: rgba(255, 255, 255, 0.14);
+          border: 1px solid rgba(255, 255, 255, 0.16);
           color: #fff;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          transition: background 0.25s var(--anim);
+          min-height: 2.25rem;
+          transition: background 0.2s var(--anim), border-color 0.2s var(--anim), transform 0.2s var(--anim);
           text-decoration: none;
         }
 
         .card-wrap:hover .card-button {
           background: var(--staff-red);
+          border-color: var(--staff-red);
+          transform: translateY(-1px);
         }
 
         .card-button-call {
           background: #fff;
-          min-height: 1.9rem;
-          min-width: 1.9rem;
+          min-height: 2rem;
+          min-width: 2rem;
           border-radius: 50%;
           color: #111;
           display: flex;
@@ -478,12 +476,12 @@ export default function StaffSection() {
         .card-button-text {
           margin-left: 0.4rem;
           font-weight: 600;
-          font-size: 0.75rem;
+          font-size: 0.76rem;
         }
 
         .card-button-call-icon {
-          width: 0.9rem;
-          height: 0.9rem;
+          width: 0.95rem;
+          height: 0.95rem;
         }
 
         .card-fade {

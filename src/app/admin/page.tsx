@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -25,12 +26,10 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       // Fetch enrollment stats
-      const enrollRes = await fetch('/api/admin/enrollments');
-      const enrollData = await enrollRes.json();
+      const enrollData = await safeJsonFetch<{ enrollments?: Array<{ status?: string }> }>('/api/admin/enrollments');
       
       // Fetch blog stats
-      const blogRes = await fetch('/api/admin/blog');
-      const blogData = await blogRes.json();
+      const blogData = await safeJsonFetch<{ posts?: Array<{ published?: boolean }> }>('/api/admin/blog');
 
       setStats({
         totalEnrollments: enrollData.enrollments?.length || 0,

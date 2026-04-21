@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -18,18 +19,13 @@ export default function AdminLoginPage() {
 
     try {
       // Verify password via API route (server-side check)
-      const response = await fetch('/api/admin/verify', {
+      const data = await safeJsonFetch<{ authenticated?: boolean; error?: string }>('/api/admin/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       });
 
-      const data = await response.json();
-      
-      console.log('Login response status:', response.status);
-      console.log('Login response data:', data);
-
-      if (response.ok && data.authenticated) {
+      if (data.authenticated) {
         // Store auth in localStorage
         localStorage.setItem('admin_authenticated', 'true');
         localStorage.setItem('admin_auth_time', Date.now().toString());

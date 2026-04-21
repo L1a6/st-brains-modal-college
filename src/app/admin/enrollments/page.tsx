@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface Enrollment {
   id: string;
@@ -25,8 +26,7 @@ export default function EnrollmentsPage() {
 
   const fetchEnrollments = async () => {
     try {
-      const res = await fetch('/api/admin/enrollments');
-      const data = await res.json();
+      const data = await safeJsonFetch<{ enrollments?: Enrollment[] }>('/api/admin/enrollments');
       setEnrollments(data.enrollments || []);
     } catch (error) {
       console.error('Error fetching enrollments:', error);

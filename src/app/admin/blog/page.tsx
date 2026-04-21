@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { safeJsonFetch } from '@/lib/safeJsonFetch';
 
 interface BlogPost {
   id: string;
@@ -29,11 +30,7 @@ export default function AdminBlogPage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/blog');
-      if (!response.ok) {
-        throw new Error('Failed to fetch posts');
-      }
-      const data = await response.json();
+      const data = await safeJsonFetch<{ posts?: BlogPost[] }>('/api/blog');
       setPosts(data.posts || []);
     } catch (error) {
       console.error('Error fetching posts:', error);
