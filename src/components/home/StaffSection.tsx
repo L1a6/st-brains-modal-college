@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useRef, useState } from 'react';
 import Script from 'next/script';
 
 type StaffCard = {
@@ -8,8 +8,6 @@ type StaffCard = {
   name: string;
   image: string;
   status: 'Online' | 'Offline';
-  rating: string;
-  learners: string;
   description: string;
 };
 
@@ -20,8 +18,6 @@ export default function StaffSection() {
       name: 'Amina Okon',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80',
       status: 'Online',
-      rating: '4.8',
-      learners: '3.1 K',
       description: 'English teacher building confident communication and clear expression.',
     },
     {
@@ -29,8 +25,6 @@ export default function StaffSection() {
       name: 'Chinonso Etim',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&q=80',
       status: 'Online',
-      rating: '4.5',
-      learners: '2.4 K',
       description: 'Mathematics teacher turning complex concepts into simple, practical steps.',
     },
     {
@@ -38,8 +32,6 @@ export default function StaffSection() {
       name: 'David Effiong',
       image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=900&q=80',
       status: 'Offline',
-      rating: '5.0',
-      learners: '1.7 K',
       description: 'Science teacher guiding students with data-driven, hands-on learning.',
     },
   ]);
@@ -97,13 +89,8 @@ export default function StaffSection() {
   return (
     <section className="brains-staff-wrapper" ref={containerRef}>
       <header className="header">
-        <a href="https://turbokit.io/" target="_blank" rel="noreferrer" className="made" aria-label="✦ the fastest website template ✦" role="tooltip">
-          <div className="by">MADE BY</div>
-          <div className="logo">
-            <img src="https://i.imgur.com/aNnuxjo.png" alt="logo" className="logo-img" draggable="false" />
-            <div className="logo-text">TurboKit</div>
-          </div>
-        </a>
+        <h2 className="section-title">Our Staff</h2>
+        <p className="section-subtitle">Meet the teachers guiding every learner with care.</p>
       </header>
 
       <section className="cards">
@@ -151,23 +138,6 @@ export default function StaffSection() {
                   </div>
                 </div>
 
-                <div className="card-tags">
-                  <div className="card-tag">
-                    <div className="card-rating-text">{staff.rating}</div>
-                    <div className="card-rating-stars">
-                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
-                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
-                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
-                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
-                      <span className="iconify card-rating-star" data-icon="line-md:star-filled"></span>
-                    </div>
-                  </div>
-                  <div className="card-tag">
-                    <span className="iconify card-tag-icon" data-icon="line-md:account"></span>
-                    <div className="card-rating-text">{staff.learners}</div>
-                  </div>
-                </div>
-
                 <div className="card-description">
                   {staff.description}
                 </div>
@@ -185,21 +155,6 @@ export default function StaffSection() {
           </div>
         ))}
       </section>
-
-      <footer className="footer">
-        <a className="follow" href="https://x.com/turbokitHQ" target="_blank" rel="noreferrer">
-          <div className="by">MORE LIKE THIS?</div>
-          <div className="follow-x">
-            <div className="follow-logo">
-              <span className="iconify" data-icon="line-md:twitter-x"></span>
-            </div>
-            <div className="follow-text">
-              <div className="follow-us">follow us</div>
-              <div className="follow-handle">@turbokitHQ</div>
-            </div>
-          </div>
-        </a>
-      </footer>
 
       {/* Required for the icons */}
       <Script src="https://code.iconify.design/3/3.1.0/iconify.min.js" strategy="lazyOnload" />
@@ -266,7 +221,25 @@ export default function StaffSection() {
           justify-content: center;
           align-items: center;
           flex-flow: column;
-          margin: 3rem 0 4rem 0;
+          margin: 1rem 0 2.5rem 0;
+          text-align: center;
+          padding: 0 1rem;
+        }
+
+        .brains-staff-wrapper .section-title {
+          font-size: clamp(2rem, 3.8vw, 3.1rem);
+          line-height: 1.1;
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          margin: 0;
+          color: #111111;
+        }
+
+        .brains-staff-wrapper .section-subtitle {
+          margin: 0.75rem 0 0;
+          max-width: 40rem;
+          color: #4b5563;
+          font-size: clamp(0.95rem, 1.4vw, 1.05rem);
         }
         
         .brains-staff-wrapper .logo {
@@ -317,8 +290,10 @@ export default function StaffSection() {
           justify-content: center;
           align-items: center;
           flex-wrap: wrap;
-          width: 100vw;
-          max-width: 100%;
+          width: 100%;
+          max-width: 72rem;
+          margin: 0 auto;
+          padding: 0 0.75rem;
         }
         
         .brains-staff-wrapper .card-wrap {
@@ -361,6 +336,10 @@ export default function StaffSection() {
           background: rgba(0,0,0,0.8);
           animation: cardIn 0.8s forwards;
           transition: transform 0.3s var(--anim);
+        }
+
+        .brains-staff-wrapper .card:hover {
+          transform: translateY(-4px);
         }
         
         .brains-staff-wrapper .card-wrap.is-dragging .card {
@@ -514,32 +493,6 @@ export default function StaffSection() {
           filter: drop-shadow(0 0 0.5rem black);
         }
         
-        .brains-staff-wrapper .card-tags {
-          display: flex;
-          align-items: center;
-          flex-flow: row;
-          margin: 0.5rem 0;
-        }
-        
-        .brains-staff-wrapper .card-tag {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: rgba(0, 0, 0, 0.4);
-          backdrop-filter: blur(0.5rem);
-          padding: 0.3rem 0.5rem;
-          border-radius: var(--radius);
-          font-size: 0.75rem;
-          margin-right: 0.5rem;
-          color: white;
-          pointer-events: none;
-        }
-        
-        .brains-staff-wrapper .card-tag-icon { margin-right: 0.25rem; }
-        .brains-staff-wrapper .card-rating-text { display: flex; justify-content: center; align-items: center; margin-right: 0.3rem; }
-        .brains-staff-wrapper .card-rating-star { font-size: 0.5rem; }
-        .brains-staff-wrapper .card-rating-stars { display: flex; justify-content: center; align-items: center; }
-        
         .brains-staff-wrapper .card-description {
           font-size: 0.8rem;
           line-height: 1.6;
@@ -620,6 +573,68 @@ export default function StaffSection() {
         
         .brains-staff-wrapper .card:hover .card-fade {
           opacity: 1; /* Darkens the gradient to highlight the red button on hover */
+        }
+
+        @media (max-width: 900px) {
+          .brains-staff-wrapper {
+            padding: 3rem 0;
+            min-height: auto;
+          }
+
+          .brains-staff-wrapper .cards {
+            padding: 0 1rem;
+          }
+
+          .brains-staff-wrapper .card {
+            width: min(100%, 22rem);
+            min-width: 0;
+            max-width: 22rem;
+            margin: 0.75rem auto;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .brains-staff-wrapper {
+            padding: 2.25rem 0;
+          }
+
+          .brains-staff-wrapper .header {
+            margin: 0 0 1.5rem 0;
+            padding: 0 1.1rem;
+          }
+
+          .brains-staff-wrapper .section-title {
+            font-size: 2rem;
+          }
+
+          .brains-staff-wrapper .section-subtitle {
+            font-size: 0.95rem;
+          }
+
+          .brains-staff-wrapper .cards {
+            padding: 0 0.65rem;
+          }
+
+          .brains-staff-wrapper .card {
+            width: 100%;
+            max-width: none;
+            min-height: 19.5rem;
+            max-height: none;
+            margin: 0.6rem 0;
+          }
+
+          .brains-staff-wrapper .card-content {
+            padding: 0;
+          }
+
+          .brains-staff-wrapper .card-name {
+            font-size: 1.15rem;
+          }
+
+          .brains-staff-wrapper .card-description {
+            font-size: 0.78rem;
+            line-height: 1.5;
+          }
         }
         
         /*=================

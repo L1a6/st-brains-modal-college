@@ -12,14 +12,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Verify transporter configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ Email transporter error:', error);
-  } else {
-    console.log('✅ Email server is ready to send messages');
-  }
-});
+// Avoid noisy build-time SMTP errors by verifying only in local dev with full config.
+const canVerifyTransport =
+  process.env.NODE_ENV === 'development' &&
+  Boolean(process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS);
+
+if (canVerifyTransport) {
+  transporter.verify((error) => {
+    if (error) {
+      console.error('Email transporter error:', error);
+    } else {
+      console.log('Email server is ready to send messages');
+    }
+  });
+}
 
 // Send email with React component
 export async function sendEmail({
