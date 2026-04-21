@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { createElement, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
 import { gsap } from 'gsap';
@@ -125,14 +125,14 @@ export default function TransformSection() {
           <div className="relative min-h-[320px] md:min-h-[380px] z-10 about-lottie">
             <div className="absolute inset-x-5 inset-y-7 bg-gradient-to-br from-[var(--adeips-blue)]/10 to-[var(--adeips-red)]/10 blur-2xl" />
             <div className="relative h-full">
-              <dotlottie-player
-                src="/education.lottie"
-                background="transparent"
-                speed="1"
-                style={{ width: '100%', height: '100%' }}
-                loop
-                autoplay
-              ></dotlottie-player>
+              {createElement('dotlottie-player', {
+                src: '/education.lottie',
+                background: 'transparent',
+                speed: '1',
+                style: { width: '100%', height: '100%' },
+                loop: true,
+                autoplay: true,
+              })}
             </div>
           </div>
         </div>

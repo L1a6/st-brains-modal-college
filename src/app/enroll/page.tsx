@@ -55,17 +55,18 @@ export default function EnrollPage() {
     setSubmitError('');
     
     try {
-      const response = await fetch('/api/enroll', {
+      const data = await safeJsonFetch<{
+        emailsSent?: boolean;
+        emailError?: string;
+        error?: string;
+        details?: string;
+      }>('/api/enroll', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const data = response.headers.get('content-type')?.includes('application/json')
-        ? await response.json()
-        : { error: 'Unexpected non-JSON response from enrollment endpoint' };
-      
-      if (!response.ok) {
+      if (data.error || data.details) {
         const errorMsg = data.details || data.error || 'Submission failed';
         throw new Error(errorMsg);
       }

@@ -5,6 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { facilitators } from '@/data/facilitators';
 
+const staffImages = [
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80',
+  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&q=80',
+  'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=1200&q=80',
+];
+
 type StaffCard = {
   id: string;
   name: string;
@@ -24,16 +30,16 @@ export default function StaffSection() {
         id: staff.id,
         name: staff.name,
         title: staff.title,
-        image: staff.image,
+        image: staffImages[index] || staff.image,
         status: index === 2 ? 'Offline' : 'Online',
-        rating: index === 0 ? '4.8' : index === 1 ? '4.6' : '4.9',
+        rating: index === 0 ? '4.5' : index === 1 ? '4.0' : '5.0',
         learners: index === 0 ? '3.1K' : index === 1 ? '2.4K' : '1.7K',
         description:
           index === 0
-            ? 'Builds confident communicators and academic leaders.'
+            ? 'Digital product designer crafting intuitive, scalable user journeys.'
             : index === 1
-              ? 'Designs high-impact learning pathways across core subjects.'
-              : 'Drives practical science coaching and analytical growth.',
+              ? 'Digital designer turning complex workflows into seamless journeys.'
+              : 'UX strategist designing frictionless, data-driven digital experiences.',
         specializations: staff.specializations || [],
       })),
     []
@@ -56,6 +62,7 @@ export default function StaffSection() {
     }
 
     setDragId(id);
+    document.body.classList.add('grabbing');
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('text/plain', id);
     play('https://cdn.freesound.org/previews/582/582898_5965684-lq.mp3');
@@ -65,6 +72,7 @@ export default function StaffSection() {
     event.preventDefault();
     const sourceId = event.dataTransfer.getData('text/plain') || dragId;
     if (!sourceId || sourceId === targetId) {
+      document.body.classList.remove('grabbing');
       setDragId(null);
       return;
     }
@@ -81,6 +89,7 @@ export default function StaffSection() {
     });
 
     play('https://cdn.freesound.org/previews/370/370962_5450487-lq.mp3');
+    document.body.classList.remove('grabbing');
     setDragId(null);
   };
 
@@ -92,10 +101,10 @@ export default function StaffSection() {
             Meet Our Staff
           </p>
           <h2 className="font-outfit text-3xl md:text-5xl lg:text-6xl font-light text-[var(--adeips-navy)] dark:text-white tracking-tight mb-4">
-            Meet the People Behind the School
+            Our Facilitators
           </h2>
           <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-3xl mx-auto">
-            Our facilitators pair academic depth with steady mentorship and a strong school culture.
+            Top-notch staff focused on clear teaching and student growth.
           </p>
         </div>
 
@@ -106,6 +115,7 @@ export default function StaffSection() {
               draggable
               onDragStart={handleDragStart(staff.id)}
               onDragEnd={() => {
+                document.body.classList.remove('grabbing');
                 setDragId(null);
                 setHandleReadyId(null);
               }}
@@ -150,8 +160,6 @@ export default function StaffSection() {
                     </div>
                   </div>
 
-                  <p className="card-subtitle">{staff.title}</p>
-
                   <div className="card-tags">
                     <div className="card-tag">
                       <div className="card-rating-text">{staff.rating}</div>
@@ -168,7 +176,7 @@ export default function StaffSection() {
                     <div className="card-button-text pointer">Get In Touch</div>
                     <div className="card-button-call pointer">
                       <svg className="card-button-call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.62a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6.27 6.27l1.28-1.28a2 2 0 0 1 2.11-.45c.84.3 1.72.51 2.62.63A2 2 0 0 1 22 16.92z" />
                       </svg>
                     </div>
                   </Link>
@@ -192,8 +200,7 @@ export default function StaffSection() {
       <style jsx>{`
         .staff-ux {
           --staff-red: var(--adeips-red);
-          --staff-red-hover: #b91c1c;
-          --radius: 2rem;
+          --radius: 2.5rem;
           --anim: cubic-bezier(0, 0, 0.25, 1);
         }
 
@@ -268,8 +275,8 @@ export default function StaffSection() {
           flex-direction: column;
           align-items: flex-end;
           justify-content: flex-end;
-          height: 24rem;
-          width: 15rem;
+          height: 22rem;
+          width: 14rem;
           padding: 1rem;
           overflow: hidden;
           border: 1px solid rgba(255, 255, 255, 0.25);
@@ -387,14 +394,6 @@ export default function StaffSection() {
           margin-right: 0.4rem;
         }
 
-        .card-subtitle {
-          color: rgba(255, 255, 255, 0.82);
-          font-size: 0.76rem;
-          margin: 0.15rem 0 0.55rem;
-          letter-spacing: 0.01em;
-          text-transform: uppercase;
-        }
-
         .card-verified {
           font-size: 0.95rem;
           color: #fff;
@@ -417,10 +416,10 @@ export default function StaffSection() {
           align-items: center;
           background: rgba(255, 255, 255, 0.14);
           backdrop-filter: blur(0.4rem);
-          padding: 0.28rem 0.5rem;
-          border-radius: 999px;
-          font-size: 0.72rem;
-          margin-right: 0.45rem;
+          padding: 0.3rem 0.5rem;
+          border-radius: var(--radius);
+          font-size: 0.75rem;
+          margin-right: 0.5rem;
           color: #fff;
         }
 
@@ -435,36 +434,33 @@ export default function StaffSection() {
 
         .card-description {
           color: rgba(255, 255, 255, 0.9);
-          font-size: 0.74rem;
-          line-height: 1.45;
+          font-size: 0.8rem;
+          line-height: 1.6;
           font-weight: 300;
-          margin: 0.4rem 0 0.65rem 0;
+          margin: 0.5rem 0 1rem 0;
         }
 
         .card-button {
-          padding: 0.28rem 0.28rem 0.28rem 0.55rem;
-          border-radius: 1.15rem;
-          background: rgba(255, 255, 255, 0.14);
-          border: 1px solid rgba(255, 255, 255, 0.16);
+          padding: 0.3rem 0.3rem 0.3rem 0.5rem;
+          border-radius: var(--radius);
+          background: rgba(255, 255, 255, 0.2);
           color: #fff;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          min-height: 2.25rem;
-          transition: background 0.2s var(--anim), border-color 0.2s var(--anim), transform 0.2s var(--anim);
+          transition: background 0.2s var(--anim), transform 0.2s var(--anim);
           text-decoration: none;
         }
 
         .card-wrap:hover .card-button {
           background: var(--staff-red);
-          border-color: var(--staff-red);
           transform: translateY(-1px);
         }
 
         .card-button-call {
           background: #fff;
-          min-height: 2rem;
-          min-width: 2rem;
+          min-height: 2.5rem;
+          min-width: 2.5rem;
           border-radius: 50%;
           color: #111;
           display: flex;
@@ -474,14 +470,16 @@ export default function StaffSection() {
         }
 
         .card-button-text {
-          margin-left: 0.4rem;
-          font-weight: 600;
-          font-size: 0.76rem;
+          margin-left: 0.5rem;
+          font-weight: 500;
+          letter-spacing: -0.02rem;
+          word-spacing: 0.05rem;
+          font-size: 0.85rem;
         }
 
         .card-button-call-icon {
-          width: 0.95rem;
-          height: 0.95rem;
+          width: 1rem;
+          height: 1rem;
         }
 
         .card-fade {
